@@ -19,6 +19,7 @@ import { registerGuildScheduledEvent } from './register-guild-scheduled-event.js
 import { registerSoundboard } from './register-soundboard.js';
 import { registerVoiceStage } from './register-voice-stage.js';
 import { registerApplicationCommands } from './register-application-command.js';
+import { registerApplicationResource } from './register-application-resource.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -47,6 +48,7 @@ function createServer(): McpServer {
   registerSoundboard(server);
   registerVoiceStage(server);
   registerApplicationCommands(server);
+  registerApplicationResource(server);
   return server;
 }
 

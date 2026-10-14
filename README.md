@@ -136,3 +136,5 @@
 討論串修改與刪除使用 `channel_modify`、`channel_delete`；Discord 權限與狀態由 Discord 判定。[官方 Channel Threads API](https://docs.discord.com/developers/resources/channel#start-thread-from-message)
 
 執行 `npm test` 可用本機 HTTP 測試伺服器完成 MCP 客戶端到 Discord 請求的全流程測試。
+
+Application tools: `application_get_current`, `application_modify_current`, `application_role_connection_metadata_get`, `application_role_connection_metadata_update`; application emojis: `application_emoji_list`, `application_emoji_create`, `application_emoji_get`, `application_emoji_modify`, `application_emoji_delete`.
