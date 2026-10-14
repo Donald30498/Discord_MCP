@@ -136,15 +136,15 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/integrations | list_guild_integrations | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/invites | list_guild_invites | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/members | list_guild_members | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/members | list_guild_members | Bot 可用；需 GUILD_MEMBERS privileged intent | 已實作：`guild_member_list` |
 | PATCH | /guilds/{guild_id}/members/@me | update_my_guild_member | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/members/{user_id} | delete_guild_member | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/members/{user_id} | get_guild_member | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/members/{user_id} | get_guild_member | Bot 可用 | 已實作：`guild_member_get` |
 | PATCH | /guilds/{guild_id}/members/{user_id} | update_guild_member | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/members/{user_id} | add_guild_member | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/members/search | search_guild_members | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
 | GET | /guilds/{guild_id}/messages/search | guild_search | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/onboarding | get_guilds_onboarding | 待核對 | 未實作 |
