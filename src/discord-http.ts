@@ -4,7 +4,7 @@ if (!token) {
   process.exit(1);
 }
 
-export async function discordRequest(method: string, path: string, requestBody?: unknown, auditLogReason?: string) {
+export async function discordRequest(method: string, path: string, requestBody?: unknown, auditLogReason?: string, binary = false) {
   const baseUrl = process.env.DISCORD_API_BASE_URL ?? 'https://discord.com/api/v10';
   const response = await fetch(`${baseUrl}${path}`, {
     method,
@@ -15,9 +15,9 @@ export async function discordRequest(method: string, path: string, requestBody?:
     },
     ...(requestBody === undefined ? {} : { body: requestBody instanceof FormData ? requestBody : JSON.stringify(requestBody) }),
   });
-  const rawBody = await response.text();
+  const rawBody = binary && response.ok ? Buffer.from(await response.arrayBuffer()).toString('base64') : await response.text();
   let body: unknown = rawBody;
-  if (rawBody) {
+  if (rawBody && !(binary && response.ok)) {
     try {
       body = JSON.parse(rawBody);
     } catch {
@@ -29,7 +29,8 @@ export async function discordRequest(method: string, path: string, requestBody?:
       name === 'content-type' || name === 'retry-after' || name.startsWith('x-ratelimit-')),
   );
   return {
-    content: [{ type: 'text' as const, text: JSON.stringify({ status: response.status, body, headers }) }],
+    content: [{ type: 'text' as const, text: JSON.stringify({ status: response.status, body, headers,
+      ...(binary && response.ok ? { body_encoding: 'base64' } : {}) }) }],
     ...(response.ok ? {} : { isError: true }),
   };
 }
