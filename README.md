@@ -49,6 +49,12 @@
 - `guild_widget_settings_get`、`guild_widget_settings_modify`：`guild_id`；修改可帶 `enabled`、`channel_id` 與 `audit_log_reason`。
 - `guild_widget_get`：`guild_id`；讀取公開小工具 JSON。
 - `guild_widget_image_get`：`guild_id`，可選 `style`；讀取公開小工具 PNG。成功結果的 `body` 是原始 PNG 位元組的 base64，另附 `body_encoding: "base64"`、HTTP 狀態與標頭。
+- `guild_auto_moderation_rule_list`、`guild_auto_moderation_rule_get`：`guild_id`，單筆另帶 `rule_id`；讀取 Discord 自動審查規則。
+- `guild_auto_moderation_rule_create`：`guild_id`、`name`、`event_type`、`trigger_type`、`actions`，可選 `trigger_metadata`、`enabled`、`exempt_roles`、`exempt_channels`、`audit_log_reason`。
+- `guild_auto_moderation_rule_modify`：`guild_id`、`rule_id`，可選建立工具中除 `trigger_type` 外的規則欄位及 `audit_log_reason`。
+- `guild_auto_moderation_rule_delete`：`guild_id`、`rule_id`，可選 `audit_log_reason`；刪除規則。
+
+上述五個工具只管理 [Discord Auto Moderation 規則資源](https://docs.discord.com/developers/resources/auto-moderation)，MCP 不監聽訊息或執行自訂審查判斷。Discord 決定權限及規則欄位的有效性。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
