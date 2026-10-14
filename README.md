@@ -17,6 +17,13 @@
 `user_get_current` 無參數，呼叫 Discord `GET /users/@me`。結果以 JSON 文字包含 `status`、`body`、`headers`；`headers` 保留回應的 `content-type`、`retry-after` 和 `x-ratelimit-*`。Discord 4xx、5xx 與 429 回應也原樣提供狀態與本文，工具不重試。
 
 - `guild_get`：`guild_id`，可選 `with_counts`；呼叫 `GET /guilds/{guild_id}`。
+- `guild_modify`：`guild_id`，可選 Discord 伺服器設定欄位及 `audit_log_reason`；呼叫 `PATCH /guilds/{guild_id}`。
+- `guild_audit_log_get`：`guild_id`，可選 `user_id`、`action_type`、`before`、`after`、`limit`；讀取一頁稽核紀錄。
+- `guild_preview_get`、`guild_voice_regions_list`、`guild_integrations_list`、`guild_vanity_url_get`：以 `guild_id` 讀取對應的預覽、語音區域、整合與 vanity URL。
+- `guild_integration_delete`：`guild_id`、`integration_id`，可選 `audit_log_reason`；刪除整合，Discord 亦會移除相關 webhook 與 Bot。
+- `guild_prune_count_get`：`guild_id`，可選 `days`、`include_roles`；取得清理成員的預估數量。
+- `guild_prune_begin`：`guild_id`，可選 `days`、`compute_prune_count`、`include_roles`、已棄用的 `reason`、`audit_log_reason`；清理不活躍成員。
+- `guild_incident_actions_modify`：`guild_id`，可選 `invites_disabled_until`、`dms_disabled_until`；設定或清除事件應對時限。
 - `guild_list_channels`：`guild_id`；呼叫 `GET /guilds/{guild_id}/channels`，清單不含討論串。
 - `channel_get`：`channel_id`；呼叫 `GET /channels/{channel_id}`，也可讀取討論串。
 - `guild_create_channel`：`guild_id`、`name`，可選官方頻道建立欄位與 `audit_log_reason`；呼叫 `POST /guilds/{guild_id}/channels`。

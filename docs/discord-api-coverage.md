@@ -5,6 +5,7 @@
 - 來源：[Discord 官方 OpenAPI v10 規格](https://github.com/discord/discord-api-spec/tree/ed014089afa986f2b532ae081c456a85de074d0c/specs)，固定於 commit ed014089afa986f2b532ae081c456a85de074d0c。
 - 初始盤點：153 條路徑、246 個 HTTP 操作；全部尚未實作。
 - Discord 將此規格標為預覽；若規格與[正式 API 文件](https://docs.discord.com/developers/reference)不同，以正式文件為準，也須補上正式文件中規格缺漏的操作。
+- T12 的 guild 設定、整合、prune、事件應對、預覽、語音區域、vanity URL 以[正式 Guild Resource](https://docs.discord.com/developers/resources/guild)核對；稽核紀錄以[正式 Audit Log Resource](https://docs.discord.com/developers/resources/audit-log)核對。
 - 以下按 URL 第一段分組，並非正式的工具命名分類。
 
 Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後填入工具名稱；不適用時填入原因。
@@ -112,8 +113,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
 | GET | /guilds/{guild_id} | get_guild | Bot 可用 | `guild_get` 已實作 |
-| PATCH | /guilds/{guild_id} | update_guild | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/audit-logs | list_guild_audit_log_entries | 待核對 | 未實作 |
+| PATCH | /guilds/{guild_id} | update_guild | Bot 可用 | 已實作：`guild_modify` |
+| GET | /guilds/{guild_id}/audit-logs | list_guild_audit_log_entries | Bot 可用 | 已實作：`guild_audit_log_get` |
 | GET | /guilds/{guild_id}/auto-moderation/rules | list_auto_moderation_rules | 可用 | guild_auto_moderation_rule_list |
 | POST | /guilds/{guild_id}/auto-moderation/rules | create_auto_moderation_rule | 可用 | guild_auto_moderation_rule_create |
 | DELETE | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | delete_auto_moderation_rule | 可用 | guild_auto_moderation_rule_delete |
@@ -132,9 +133,9 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/emojis/{emoji_id} | delete_guild_emoji | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/emojis/{emoji_id} | get_guild_emoji | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/emojis/{emoji_id} | update_guild_emoji | 待核對 | 未實作 |
-| PUT | /guilds/{guild_id}/incident-actions | update_guild_incident_actions | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/integrations | list_guild_integrations | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | 待核對 | 未實作 |
+| PUT | /guilds/{guild_id}/incident-actions | update_guild_incident_actions | Bot 可用 | 已實作：`guild_incident_actions_modify` |
+| GET | /guilds/{guild_id}/integrations | list_guild_integrations | Bot 可用 | 已實作：`guild_integrations_list` |
+| DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | Bot 可用 | 已實作：`guild_integration_delete` |
 | GET | /guilds/{guild_id}/invites | list_guild_invites | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/members | list_guild_members | Bot 可用；需 GUILD_MEMBERS privileged intent | 已實作：`guild_member_list` |
 | PATCH | /guilds/{guild_id}/members/@me | update_my_guild_member | Bot 可用 | 已實作：`guild_member_modify_current` |
@@ -145,16 +146,16 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | Bot 可用 | 已實作：`guild_member_role_remove` |
 | PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | Bot 可用 | 已實作：`guild_member_role_add` |
 | GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
-| GET | /guilds/{guild_id}/messages/search | guild_search | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/messages/search | guild_search | 待核對正式文件（預覽規格獨有） | 未實作 |
+| GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對正式文件（預覽規格獨有） | 未實作 |
 | GET | /guilds/{guild_id}/onboarding | get_guilds_onboarding | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/onboarding | put_guilds_onboarding | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/preview | get_guild_preview | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/prune | preview_prune_guild | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/prune | prune_guild | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/regions | list_guild_voice_regions | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/requests | get_guild_join_requests | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/requests/{request_id} | action_guild_join_request | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/preview | get_guild_preview | Bot 可用 | 已實作：`guild_preview_get` |
+| GET | /guilds/{guild_id}/prune | preview_prune_guild | Bot 可用 | 已實作：`guild_prune_count_get` |
+| POST | /guilds/{guild_id}/prune | prune_guild | Bot 可用 | 已實作：`guild_prune_begin` |
+| GET | /guilds/{guild_id}/regions | list_guild_voice_regions | Bot 可用 | 已實作：`guild_voice_regions_list` |
+| GET | /guilds/{guild_id}/requests | get_guild_join_requests | 待核對正式文件（預覽規格獨有） | 未實作 |
+| PATCH | /guilds/{guild_id}/requests/{request_id} | action_guild_join_request | 待核對正式文件（預覽規格獨有） | 未實作 |
 | GET | /guilds/{guild_id}/roles | list_guild_roles | Bot 可用 | 已實作：`guild_role_list` |
 | PATCH | /guilds/{guild_id}/roles | bulk_update_guild_roles | Bot 可用 | 已實作：`guild_role_positions_modify` |
 | POST | /guilds/{guild_id}/roles | create_guild_role | Bot 可用 | 已實作：`guild_role_create` |
@@ -189,7 +190,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PATCH | /guilds/{guild_id}/templates/{code} | update_guild_template | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/templates/{code} | sync_guild_template | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/threads/active | get_active_guild_threads | Bot 可用 | 已實作 `guild_thread_list_active` |
-| GET | /guilds/{guild_id}/vanity-url | get_guild_vanity_url | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/vanity-url | get_guild_vanity_url | Bot 可用 | 已實作：`guild_vanity_url_get` |
 | GET | /guilds/{guild_id}/voice-states/@me | get_self_voice_state | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/voice-states/@me | update_self_voice_state | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/voice-states/{user_id} | get_voice_state | 待核對 | 未實作 |
