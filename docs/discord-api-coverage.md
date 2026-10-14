@@ -163,17 +163,17 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/roles/{role_id} | get_guild_role | Bot 可用 | 已實作：`guild_role_get` |
 | PATCH | /guilds/{guild_id}/roles/{role_id} | update_guild_role | Bot 可用 | 已實作：`guild_role_modify` |
 | GET | /guilds/{guild_id}/roles/member-counts | guild_role_member_counts | Bot 可用 | 已實作：`guild_role_member_counts_get` |
-| GET | /guilds/{guild_id}/scheduled-events | list_guild_scheduled_events | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/scheduled-events | create_guild_scheduled_event | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | delete_guild_scheduled_event | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | get_guild_scheduled_event | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | update_guild_scheduled_event | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/{guild_scheduled_event_exception_id}/users | list_guild_scheduled_event_exception_users | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions | create_guild_scheduled_event_exception | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | delete_guild_scheduled_event_exception | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | update_guild_scheduled_event_exception | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users | list_guild_scheduled_event_users | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users/counts | count_guild_scheduled_event_users | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/scheduled-events | list_guild_scheduled_events | Bot 可用 | 已實作：`guild_scheduled_event_list` |
+| POST | /guilds/{guild_id}/scheduled-events | create_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_create` |
+| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | delete_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_delete` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | get_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_get` |
+| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | update_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_modify` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/{guild_scheduled_event_exception_id}/users | list_guild_scheduled_event_exception_users | 待核對正式文件（預覽規格獨有） | 未實作 |
+| POST | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions | create_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | delete_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | update_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users | list_guild_scheduled_event_users | Bot 可用 | 已實作：`guild_scheduled_event_users_list` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users/counts | count_guild_scheduled_event_users | 待核對正式文件（預覽規格獨有） | 未實作 |
 | GET | /guilds/{guild_id}/soundboard-sounds | list_guild_soundboard_sounds | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/soundboard-sounds | create_guild_soundboard_sound | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/soundboard-sounds/{sound_id} | delete_guild_soundboard_sound | 待核對 | 未實作 |
