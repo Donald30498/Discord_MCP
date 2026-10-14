@@ -85,6 +85,27 @@ test('agent creates, reads, modifies, deletes, and bulk overwrites global comman
   });
 });
 
+test('agent sets the handler for a global primary entry point command', async () => {
+  await withMcp([
+    { status: 201, body: { id: '7', name: 'launch', type: 4, handler: 2 } },
+    { status: 200, body: { id: '7', name: 'launch', type: 4, handler: 1 } },
+  ], async (client, requests) => {
+    const created = await client.callTool({ name: 'application_command_create', arguments: {
+      application_id: '1', name: 'launch', description: 'Launch activity', type: 4, handler: 2,
+    } });
+    assert.equal(resultBody(created).body.handler, 2);
+    const modified = await client.callTool({ name: 'application_command_modify', arguments: {
+      application_id: '1', command_id: '7', handler: 1,
+    } });
+    assert.equal(resultBody(modified).body.handler, 1);
+    assert.deepEqual(requests.map(({ method, url, body }) => ({ method, url, body })), [
+      { method: 'POST', url: '/api/v10/applications/1/commands',
+        body: { name: 'launch', description: 'Launch activity', type: 4, handler: 2 } },
+      { method: 'PATCH', url: '/api/v10/applications/1/commands/7', body: { handler: 1 } },
+    ]);
+  });
+});
+
 test('agent manages guild commands and reads their permissions', async () => {
   await withMcp([
     { status: 200, body: [{ id: '7', name: 'hello' }] },

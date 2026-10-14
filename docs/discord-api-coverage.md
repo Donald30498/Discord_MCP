@@ -149,7 +149,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | Bot 可用 | 已實作：`guild_member_role_remove` |
 | PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | Bot 可用 | 已實作：`guild_member_role_add` |
 | GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
-| GET | /guilds/{guild_id}/messages/search | guild_search | 待核對正式文件（預覽規格獨有） | 未實作 |
+| GET | /guilds/{guild_id}/messages/search | guild_search | Bot 可用；需 `READ_MESSAGE_HISTORY`，並受 `MESSAGE_CONTENT` privileged intent 限制 | 已實作：`guild_message_search`；索引未就緒時 Discord 回 202 / 110000，由 Agent 決定是否重試 |
 | GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對正式文件（預覽規格獨有） | 未實作 |
 | GET | /guilds/{guild_id}/onboarding | get_guilds_onboarding | 可用 | guild_onboarding_get |
 | PUT | /guilds/{guild_id}/onboarding | put_guilds_onboarding | 可用 | guild_onboarding_modify |

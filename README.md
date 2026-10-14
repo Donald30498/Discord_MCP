@@ -101,13 +101,14 @@
 
 應用程式指令工具依 [Discord Application Commands 文件](https://docs.discord.com/developers/interactions/application-commands) 提供：
 
-- 全域指令：`application_command_list`、`application_command_create`、`application_command_bulk_overwrite`、`application_command_get`、`application_command_modify`、`application_command_delete`。工具使用 `application_id`；單筆操作另用 `command_id`；列表可帶 `with_localizations`，覆寫接受 `commands` 陣列。
+- 全域指令：`application_command_list`、`application_command_create`、`application_command_bulk_overwrite`、`application_command_get`、`application_command_modify`、`application_command_delete`。工具使用 `application_id`；單筆操作另用 `command_id`；列表可帶 `with_localizations`，覆寫接受 `commands` 陣列。建立與修改 `PRIMARY_ENTRY_POINT` 指令可帶 `handler`。
 - 伺服器指令：對應的 `guild_application_command_*` 六個操作，另用 `guild_id`；可讀取權限的 `guild_application_command_permissions_list` 與 `guild_application_command_permissions_get`。
 - 建立與修改接受 Discord 指令欄位，如 `name`、`description`、`type`、`options`、本地化、預設成員權限、整合類型與情境。Discord 判定欄位有效性與操作權限。
 
 更新單一指令權限的官方 `PUT` 需要使用者 OAuth Bearer token，不能只用本程序的 Bot token，因此不在目前工具表中。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
+- `guild_message_search`：`guild_id`，可選 Discord 搜尋條件與 `limit`、`offset`；陣列條件以同名查詢參數重複傳送。Discord 索引尚未就緒時可能回 `202 / 110000`，由 Agent 決定是否再次呼叫。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
 - `message_edit`：`channel_id`、`message_id` 加上 `content`、`embeds`、`flags`、`allowed_mentions`、`components` 或 `attachments`；呼叫 `PATCH /channels/{channel_id}/messages/{message_id}`。
 - `message_delete`：`channel_id`、`message_id`，可選 `audit_log_reason`；呼叫 `DELETE /channels/{channel_id}/messages/{message_id}`。

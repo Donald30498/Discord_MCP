@@ -35,4 +35,48 @@ export function registerMessageRead(server: McpServer): void {
       return discordGet(`/channels/${encodeURIComponent(channel_id)}/messages${suffix}`);
     },
   );
+  server.registerTool(
+    'guild_message_search',
+    {
+      description: 'Search one page of guild messages (GET /guilds/{guild_id}/messages/search).',
+      inputSchema: z.strictObject({
+        guild_id: z.string(),
+        limit: z.number().int().optional(),
+        offset: z.number().int().optional(),
+        max_id: z.string().optional(),
+        min_id: z.string().optional(),
+        slop: z.number().int().optional(),
+        content: z.string().optional(),
+        channel_id: z.array(z.string()).optional(),
+        author_type: z.array(z.string()).optional(),
+        author_id: z.array(z.string()).optional(),
+        mentions: z.array(z.string()).optional(),
+        mentions_role_id: z.array(z.string()).optional(),
+        mention_everyone: z.boolean().optional(),
+        replied_to_user_id: z.array(z.string()).optional(),
+        replied_to_message_id: z.array(z.string()).optional(),
+        pinned: z.boolean().optional(),
+        has: z.array(z.string()).optional(),
+        embed_type: z.array(z.string()).optional(),
+        embed_provider: z.array(z.string()).optional(),
+        link_hostname: z.array(z.string()).optional(),
+        attachment_filename: z.array(z.string()).optional(),
+        attachment_extension: z.array(z.string()).optional(),
+        sort_by: z.string().optional(),
+        sort_order: z.string().optional(),
+        include_nsfw: z.boolean().optional(),
+      }),
+    },
+    async ({ guild_id, ...filters }) => {
+      const query = new URLSearchParams();
+      for (const [name, value] of Object.entries(filters)) {
+        if (Array.isArray(value)) {
+          for (const item of value) query.append(name, item);
+        } else if (value !== undefined) {
+          query.set(name, String(value));
+        }
+      }
+      return discordGet(`/guilds/${encodeURIComponent(guild_id)}/messages/search${query.size ? `?${query}` : ''}`);
+    },
+  );
 }

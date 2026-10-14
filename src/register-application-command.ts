@@ -31,7 +31,7 @@ export function registerApplicationCommands(server: McpServer): void {
 
   server.registerTool('application_command_create', {
     description: 'Create a global application command (POST /applications/{application_id}/commands).',
-    inputSchema: z.strictObject({ application_id: id, ...commandFields, name: z.string() }),
+    inputSchema: z.strictObject({ application_id: id, ...commandFields, name: z.string(), handler: z.number().int().optional() }),
   }, async ({ application_id, ...body }) => discordRequest('POST', globalPath(application_id), body));
 
   server.registerTool('application_command_bulk_overwrite', {
@@ -48,7 +48,7 @@ export function registerApplicationCommands(server: McpServer): void {
 
   server.registerTool('application_command_modify', {
     description: 'Modify a global application command (PATCH /applications/{application_id}/commands/{command_id}).',
-    inputSchema: z.strictObject({ application_id: id, command_id: id, ...commandFields }),
+    inputSchema: z.strictObject({ application_id: id, command_id: id, ...commandFields, handler: z.number().int().optional() }),
   }, async ({ application_id, command_id, ...body }) =>
     discordRequest('PATCH', `${globalPath(application_id)}/${encodeURIComponent(command_id)}`, body));
 
