@@ -62,6 +62,9 @@
 - `guild_auto_moderation_rule_create`：`guild_id`、`name`、`event_type`、`trigger_type`、`actions`，可選 `trigger_metadata`、`enabled`、`exempt_roles`、`exempt_channels`、`audit_log_reason`。
 - `guild_auto_moderation_rule_modify`：`guild_id`、`rule_id`，可選建立工具中除 `trigger_type` 外的規則欄位及 `audit_log_reason`。
 - `guild_auto_moderation_rule_delete`：`guild_id`、`rule_id`，可選 `audit_log_reason`；刪除規則。
+
+上述五個工具只管理 [Discord Auto Moderation 規則資源](https://docs.discord.com/developers/resources/auto-moderation)，MCP 不監聽訊息或執行自訂審查判斷。Discord 決定權限及規則欄位的有效性。
+
 - `guild_emoji_list`、`guild_emoji_get`：`guild_id`，單筆另帶 `emoji_id`；讀取伺服器表情符號。
 - `guild_emoji_create`：`guild_id`、`name`、`image`（Discord 支援的 image data URI），可選 `roles`、`audit_log_reason`；建立表情符號。
 - `guild_emoji_modify`、`guild_emoji_delete`：`guild_id`、`emoji_id`；修改可帶 `name`、`roles`，兩者都可帶 `audit_log_reason`。
@@ -78,8 +81,6 @@
 - `guild_scheduled_event_modify`：活動識別欄位，可選官方活動修改欄位、`status` 與 `audit_log_reason`；修改活動。
 - `guild_scheduled_event_delete`：活動識別欄位；刪除活動。
 - `guild_scheduled_event_users_list`：活動識別欄位，可選 `limit`、`with_member`、`before`、`after`；一次讀取一頁報名使用者。
-
-上述五個工具只管理 [Discord Auto Moderation 規則資源](https://docs.discord.com/developers/resources/auto-moderation)，MCP 不監聽訊息或執行自訂審查判斷。Discord 決定權限及規則欄位的有效性。
 
 音效板工具依 [Discord Soundboard API](https://docs.discord.com/developers/resources/soundboard) 提供：
 
