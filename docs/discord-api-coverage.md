@@ -6,6 +6,7 @@
 - 初始盤點：153 條路徑、246 個 HTTP 操作；全部尚未實作。
 - Discord 將此規格標為預覽；若規格與[正式 API 文件](https://docs.discord.com/developers/reference)不同，以正式文件為準，也須補上正式文件中規格缺漏的操作。
 - T12 的 guild 設定、整合、prune、事件應對、預覽、語音區域、vanity URL 以[正式 Guild Resource](https://docs.discord.com/developers/resources/guild)核對；稽核紀錄以[正式 Audit Log Resource](https://docs.discord.com/developers/resources/audit-log)核對。
+- T17 的七項音效板操作以[正式 Soundboard Resource](https://docs.discord.com/developers/resources/soundboard)核對。
 - 以下按 URL 第一段分組，並非正式的工具命名分類。
 
 Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後填入工具名稱；不適用時填入原因。
@@ -84,7 +85,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | POST | /channels/{channel_id}/polls/{message_id}/expire | poll_expire | Bot 可用；僅能結束自己建立的投票 | 已實作 `poll_end` |
 | DELETE | /channels/{channel_id}/recipients/{user_id} | delete_group_dm_user | 待核對 | 未實作 |
 | PUT | /channels/{channel_id}/recipients/{user_id} | add_group_dm_user | 待核對 | 未實作 |
-| POST | /channels/{channel_id}/send-soundboard-sound | send_soundboard_sound | 待核對 | 未實作 |
+| POST | /channels/{channel_id}/send-soundboard-sound | send_soundboard_sound | Bot 可用；語音連線及權限由 Discord 判定 | 已實作 `channel_soundboard_sound_send` |
 | GET | /channels/{channel_id}/thread-members | list_thread_members | Bot 可用；Discord `GUILD_MEMBERS` intent 條件 | 已實作 `thread_member_list`，保留 `with_member/after/limit` |
 | DELETE | /channels/{channel_id}/thread-members/@me | leave_thread | Bot 可用；由 Discord 判定封存狀態 | 已實作 `thread_leave` |
 | PUT | /channels/{channel_id}/thread-members/@me | join_thread | Bot 可用；由 Discord 判定封存狀態 | 已實作 `thread_join` |
@@ -163,22 +164,22 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/roles/{role_id} | get_guild_role | Bot 可用 | 已實作：`guild_role_get` |
 | PATCH | /guilds/{guild_id}/roles/{role_id} | update_guild_role | Bot 可用 | 已實作：`guild_role_modify` |
 | GET | /guilds/{guild_id}/roles/member-counts | guild_role_member_counts | Bot 可用 | 已實作：`guild_role_member_counts_get` |
-| GET | /guilds/{guild_id}/scheduled-events | list_guild_scheduled_events | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/scheduled-events | create_guild_scheduled_event | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | delete_guild_scheduled_event | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | get_guild_scheduled_event | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | update_guild_scheduled_event | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/{guild_scheduled_event_exception_id}/users | list_guild_scheduled_event_exception_users | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions | create_guild_scheduled_event_exception | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | delete_guild_scheduled_event_exception | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | update_guild_scheduled_event_exception | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users | list_guild_scheduled_event_users | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users/counts | count_guild_scheduled_event_users | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/soundboard-sounds | list_guild_soundboard_sounds | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/soundboard-sounds | create_guild_soundboard_sound | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/soundboard-sounds/{sound_id} | delete_guild_soundboard_sound | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/soundboard-sounds/{sound_id} | get_guild_soundboard_sound | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/soundboard-sounds/{sound_id} | update_guild_soundboard_sound | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/scheduled-events | list_guild_scheduled_events | Bot 可用 | 已實作：`guild_scheduled_event_list` |
+| POST | /guilds/{guild_id}/scheduled-events | create_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_create` |
+| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | delete_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_delete` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | get_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_get` |
+| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | update_guild_scheduled_event | Bot 可用 | 已實作：`guild_scheduled_event_modify` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/{guild_scheduled_event_exception_id}/users | list_guild_scheduled_event_exception_users | 待核對正式文件（預覽規格獨有） | 未實作 |
+| POST | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions | create_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | delete_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| PATCH | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/exceptions/{exception_id} | update_guild_scheduled_event_exception | 待核對正式文件（預覽規格獨有） | 未實作 |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users | list_guild_scheduled_event_users | Bot 可用 | 已實作：`guild_scheduled_event_users_list` |
+| GET | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}/users/counts | count_guild_scheduled_event_users | 待核對正式文件（預覽規格獨有） | 未實作 |
+| GET | /guilds/{guild_id}/soundboard-sounds | list_guild_soundboard_sounds | Bot 可用 | 已實作 `guild_soundboard_sound_list` |
+| POST | /guilds/{guild_id}/soundboard-sounds | create_guild_soundboard_sound | Bot 可用；Discord 判定建立權限 | 已實作 `guild_soundboard_sound_create` |
+| DELETE | /guilds/{guild_id}/soundboard-sounds/{sound_id} | delete_guild_soundboard_sound | Bot 可用；Discord 判定刪除權限 | 已實作 `guild_soundboard_sound_delete` |
+| GET | /guilds/{guild_id}/soundboard-sounds/{sound_id} | get_guild_soundboard_sound | Bot 可用 | 已實作 `guild_soundboard_sound_get` |
+| PATCH | /guilds/{guild_id}/soundboard-sounds/{sound_id} | update_guild_soundboard_sound | Bot 可用；Discord 判定修改權限 | 已實作 `guild_soundboard_sound_modify` |
 | GET | /guilds/{guild_id}/stickers | list_guild_stickers | Bot 可用 | 已實作：`guild_sticker_list` |
 | POST | /guilds/{guild_id}/stickers | create_guild_sticker | Bot 可用 | 已實作：`guild_sticker_create` |
 | DELETE | /guilds/{guild_id}/stickers/{sticker_id} | delete_guild_sticker | Bot 可用 | 已實作：`guild_sticker_delete` |
@@ -274,7 +275,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /soundboard-default-sounds | get_soundboard_default_sounds | 待核對 | 未實作 |
+| GET | /soundboard-default-sounds | get_soundboard_default_sounds | Bot 可用 | 已實作 `soundboard_default_sound_list` |
 
 ## stage-instances（4）
 
