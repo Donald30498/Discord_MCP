@@ -14,6 +14,7 @@ import { registerThread } from './register-thread.js';
 import { registerGuildOnboardingTemplateWidget } from './register-guild-onboarding-template-widget.js';
 import { registerGuildManage } from './register-guild-manage.js';
 import { registerAutoModeration } from './register-auto-moderation.js';
+import { registerEmojiSticker } from './register-emoji-sticker.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -37,6 +38,7 @@ function createServer(): McpServer {
   registerGuildOnboardingTemplateWidget(server);
   registerGuildManage(server);
   registerAutoModeration(server);
+  registerEmojiSticker(server);
   return server;
 }
 

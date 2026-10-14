@@ -60,6 +60,13 @@
 - `guild_auto_moderation_rule_create`：`guild_id`、`name`、`event_type`、`trigger_type`、`actions`，可選 `trigger_metadata`、`enabled`、`exempt_roles`、`exempt_channels`、`audit_log_reason`。
 - `guild_auto_moderation_rule_modify`：`guild_id`、`rule_id`，可選建立工具中除 `trigger_type` 外的規則欄位及 `audit_log_reason`。
 - `guild_auto_moderation_rule_delete`：`guild_id`、`rule_id`，可選 `audit_log_reason`；刪除規則。
+- `guild_emoji_list`、`guild_emoji_get`：`guild_id`，單筆另帶 `emoji_id`；讀取伺服器表情符號。
+- `guild_emoji_create`：`guild_id`、`name`、`image`（Discord 支援的 image data URI），可選 `roles`、`audit_log_reason`；建立表情符號。
+- `guild_emoji_modify`、`guild_emoji_delete`：`guild_id`、`emoji_id`；修改可帶 `name`、`roles`，兩者都可帶 `audit_log_reason`。
+- `guild_sticker_list`、`guild_sticker_get`：`guild_id`，單筆另帶 `sticker_id`；讀取伺服器貼圖。
+- `guild_sticker_create`：`guild_id`、`name`、`description`、`tags`、`file_path`，可選 `audit_log_reason`；從呼叫端指定的本機檔案建立貼圖，以 Discord `multipart/form-data` 的 `file` 欄位上傳。
+- `guild_sticker_modify`、`guild_sticker_delete`：`guild_id`、`sticker_id`；修改可帶 `name`、`description`、`tags`，兩者都可帶 `audit_log_reason`。
+- `sticker_get`、`sticker_pack_list`、`sticker_pack_get`：讀取任意貼圖、貼圖包列表或單一貼圖包；單筆分別帶 `sticker_id`、`pack_id`。
 
 上述五個工具只管理 [Discord Auto Moderation 規則資源](https://docs.discord.com/developers/resources/auto-moderation)，MCP 不監聽訊息或執行自訂審查判斷。Discord 決定權限及規則欄位的有效性。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
