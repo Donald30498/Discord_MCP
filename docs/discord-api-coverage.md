@@ -58,10 +58,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /channels/{channel_id}/invites | list_channel_invites | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/invites | create_channel_invite | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/messages | list_messages | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_list` |
-| POST | /channels/{channel_id}/messages | create_message | Bot 可用 | `message_create` 已實作 JSON 請求；檔案上傳待 T05 |
+| POST | /channels/{channel_id}/messages | create_message | Bot 可用 | `message_create` 已實作 JSON 與 multipart 檔案上傳 |
 | DELETE | /channels/{channel_id}/messages/{message_id} | delete_message | Bot 可用 | `message_delete` 已實作 |
 | GET | /channels/{channel_id}/messages/{message_id} | get_message | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_get` |
-| PATCH | /channels/{channel_id}/messages/{message_id} | update_message | Bot 可用 | `message_edit` 已實作 JSON 請求；檔案上傳待 T05 |
+| PATCH | /channels/{channel_id}/messages/{message_id} | update_message | Bot 可用 | `message_edit` 已實作 JSON 與 multipart 檔案上傳 |
 | POST | /channels/{channel_id}/messages/{message_id}/crosspost | crosspost_message | Bot 可用 | `message_crosspost` 已實作；限公告頻道，依 Discord 權限處理 |
 | DELETE | /channels/{channel_id}/messages/{message_id}/reactions | delete_all_message_reactions | 待核對 | 未實作 |
 | DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name} | delete_all_message_reactions_by_emoji | 待核對 | 未實作 |

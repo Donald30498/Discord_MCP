@@ -1,9 +1,13 @@
 import type { McpServer } from '@modelcontextprotocol/server';
 import * as z from 'zod/v4';
+import { readFile } from 'node:fs/promises';
+import { basename } from 'node:path';
 import { discordRequest } from './discord-http.js';
 
 const jsonObject = z.record(z.string(), z.unknown());
+const file = z.strictObject({ path: z.string(), filename: z.string().optional() });
 const createFields = {
+  files: z.array(file).optional(),
   content: z.string().optional(),
   nonce: z.union([z.string(), z.number()]).optional(),
   tts: z.boolean().optional(),
@@ -19,6 +23,7 @@ const createFields = {
   shared_client_theme: jsonObject.optional(),
 };
 const editFields = {
+  files: z.array(file).optional(),
   content: z.string().nullable().optional(),
   embeds: z.array(jsonObject).nullable().optional(),
   flags: z.number().int().nullable().optional(),
@@ -27,16 +32,27 @@ const editFields = {
   attachments: z.array(jsonObject).nullable().optional(),
 };
 
+async function messageBody(body: Record<string, unknown>, files?: Array<{ path: string; filename?: string }>) {
+  if (!files?.length) return body;
+  const form = new FormData();
+  form.set('payload_json', JSON.stringify(body));
+  for (const [index, file] of files.entries()) {
+    const bytes = await readFile(file.path);
+    form.append(`files[${index}]`, new Blob([new Uint8Array(bytes)]), file.filename ?? basename(file.path));
+  }
+  return form;
+}
+
 export function registerMessageWrite(server: McpServer): void {
   server.registerTool('message_create', {
     description: 'Create a message (POST /channels/{channel_id}/messages).',
     inputSchema: z.strictObject({ channel_id: z.string(), ...createFields }),
-  }, async ({ channel_id, ...body }) => discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/messages`, body));
+  }, async ({ channel_id, files, ...body }) => discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/messages`, await messageBody(body, files)));
 
   server.registerTool('message_edit', {
     description: 'Edit a message (PATCH /channels/{channel_id}/messages/{message_id}).',
     inputSchema: z.strictObject({ channel_id: z.string(), message_id: z.string(), ...editFields }),
-  }, async ({ channel_id, message_id, ...body }) => discordRequest('PATCH', `/channels/${encodeURIComponent(channel_id)}/messages/${encodeURIComponent(message_id)}`, body));
+  }, async ({ channel_id, message_id, files, ...body }) => discordRequest('PATCH', `/channels/${encodeURIComponent(channel_id)}/messages/${encodeURIComponent(message_id)}`, await messageBody(body, files)));
 
   server.registerTool('message_delete', {
     description: 'Delete a message (DELETE /channels/{channel_id}/messages/{message_id}).',

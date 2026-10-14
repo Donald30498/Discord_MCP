@@ -10,10 +10,10 @@ export async function discordRequest(method: string, path: string, requestBody?:
     method,
     headers: {
       Authorization: `Bot ${token}`,
-      ...(requestBody === undefined ? {} : { 'Content-Type': 'application/json' }),
+      ...(requestBody === undefined || requestBody instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(auditLogReason === undefined ? {} : { 'X-Audit-Log-Reason': encodeURIComponent(auditLogReason) }),
     },
-    ...(requestBody === undefined ? {} : { body: JSON.stringify(requestBody) }),
+    ...(requestBody === undefined ? {} : { body: requestBody instanceof FormData ? requestBody : JSON.stringify(requestBody) }),
   });
   const rawBody = await response.text();
   let body: unknown = rawBody;
