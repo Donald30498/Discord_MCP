@@ -28,6 +28,11 @@
 - `guild_member_get`：`guild_id`、`user_id`；讀取單一伺服器成員。
 - `guild_member_list`：`guild_id`，可選 `limit`、`after`；依 Discord 分頁讀取一次成員列表。Bot 需啟用 `GUILD_MEMBERS` privileged intent。
 - `guild_member_search`：`guild_id`、`query`，可選 `limit`；搜尋使用者名稱或暱稱前綴。
+- `guild_role_list`、`guild_role_get`、`guild_role_member_counts_get`：以 `guild_id` 讀取身分組列表或人數；單一身分組另帶 `role_id`。
+- `guild_role_create`、`guild_role_modify`：`guild_id`，修改時另帶 `role_id`；可填 Discord 身分組欄位 `name`、`permissions`、`color`、`colors`、`hoist`、`icon`、`unicode_emoji`、`mentionable` 與 `audit_log_reason`。`color` 是 Discord 保留的舊欄位，建議使用 `colors`。
+- `guild_role_positions_modify`：`guild_id`、`roles: [{ id, position? }]`，可選 `audit_log_reason`；批次調整身分組位置。
+- `guild_role_delete`：`guild_id`、`role_id`，可選 `audit_log_reason`；刪除身分組。
+- `guild_member_role_add`、`guild_member_role_remove`：`guild_id`、`user_id`、`role_id`，可選 `audit_log_reason`；指派或移除成員身分組。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
