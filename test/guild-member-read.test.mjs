@@ -41,7 +41,9 @@ async function withMcp(run) {
 test('agent reads one guild member, one list page, and member search through MCP', async () => {
   await withMcp(async (client, requests) => {
     const { tools } = await client.listTools();
-    assert.deepEqual(tools.map(({ name }) => name).filter((name) => name.startsWith('guild_member_')), [
+    assert.deepEqual(tools.map(({ name }) => name).filter((name) => [
+      'guild_member_get', 'guild_member_list', 'guild_member_search',
+    ].includes(name)), [
       'guild_member_get', 'guild_member_list', 'guild_member_search',
     ]);
 

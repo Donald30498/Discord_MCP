@@ -5,6 +5,7 @@ import { discordGet } from './discord-http.js';
 import { registerGuildChannelRead } from './register-guild-channel-read.js';
 import { registerChannelWrite } from './register-channel-write.js';
 import { registerGuildMemberRead } from './register-guild-member-read.js';
+import { registerGuildMemberManage } from './register-guild-member-manage.js';
 import { registerMessageRead } from './register-message-read.js';
 import { registerMessageReactionPinPoll } from './register-message-reaction-pin-poll.js';
 import { registerMessageWrite } from './register-message-write.js';
@@ -22,6 +23,7 @@ function createServer(): McpServer {
   registerGuildChannelRead(server);
   registerChannelWrite(server);
   registerGuildMemberRead(server);
+  registerGuildMemberManage(server);
   registerMessageRead(server);
   registerMessageReactionPinPoll(server);
   registerMessageWrite(server);

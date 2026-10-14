@@ -28,6 +28,14 @@
 - `guild_member_get`：`guild_id`、`user_id`；讀取單一伺服器成員。
 - `guild_member_list`：`guild_id`，可選 `limit`、`after`；依 Discord 分頁讀取一次成員列表。Bot 需啟用 `GUILD_MEMBERS` privileged intent。
 - `guild_member_search`：`guild_id`、`query`，可選 `limit`；搜尋使用者名稱或暱稱前綴。
+- `guild_member_modify`：`guild_id`、`user_id`，可選官方成員修改欄位與 `audit_log_reason`。
+- `guild_member_modify_current`：`guild_id`，可選 `nick`、`banner`、`avatar`、`bio`、`audit_log_reason`；修改 Bot 自身的伺服器成員資料。
+- `guild_member_remove`：`guild_id`、`user_id`，可選 `audit_log_reason`；踢除成員。
+- `guild_ban_list`：`guild_id`，可選 `limit`、`before`、`after`；依 Discord 分頁讀取一次封鎖列表。
+- `guild_ban_get`：`guild_id`、`user_id`；讀取單一封鎖。
+- `guild_ban_create`：`guild_id`、`user_id`，可選 `delete_message_seconds`、已棄用的 `delete_message_days`、`audit_log_reason`；封鎖成員。
+- `guild_ban_delete`：`guild_id`、`user_id`，可選 `audit_log_reason`；解除封鎖。
+- `guild_ban_bulk_create`：`guild_id`、`user_ids`，可選 `delete_message_seconds`、`audit_log_reason`；批量封鎖，Discord 限制最多 200 位。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
