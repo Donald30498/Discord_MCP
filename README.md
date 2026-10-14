@@ -19,6 +19,12 @@
 - `guild_get`：`guild_id`，可選 `with_counts`；呼叫 `GET /guilds/{guild_id}`。
 - `guild_list_channels`：`guild_id`；呼叫 `GET /guilds/{guild_id}/channels`，清單不含討論串。
 - `channel_get`：`channel_id`；呼叫 `GET /channels/{channel_id}`，也可讀取討論串。
+- `guild_create_channel`：`guild_id`、`name`，可選官方頻道建立欄位與 `audit_log_reason`；呼叫 `POST /guilds/{guild_id}/channels`。
+- `guild_modify_channel_positions`：`guild_id`、`channels`（官方頻道位置物件陣列），可選 `audit_log_reason`；呼叫 `PATCH /guilds/{guild_id}/channels`。
+- `channel_modify`：`channel_id`，可選官方頻道或討論串修改欄位與 `audit_log_reason`；呼叫 `PATCH /channels/{channel_id}`。
+- `channel_delete`：`channel_id`，可選 `audit_log_reason`；呼叫 `DELETE /channels/{channel_id}`。伺服器頻道刪除無法復原。
+- `channel_permission_edit`：`channel_id`、`overwrite_id`、`type`，可選 `allow`、`deny`、`audit_log_reason`；呼叫 `PUT /channels/{channel_id}/permissions/{overwrite_id}`。
+- `channel_permission_delete`：`channel_id`、`overwrite_id`，可選 `audit_log_reason`；呼叫 `DELETE /channels/{channel_id}/permissions/{overwrite_id}`。
 - `guild_member_get`：`guild_id`、`user_id`；讀取單一伺服器成員。
 - `guild_member_list`：`guild_id`，可選 `limit`、`after`；依 Discord 分頁讀取一次成員列表。Bot 需啟用 `GUILD_MEMBERS` privileged intent。
 - `guild_member_search`：`guild_id`、`query`，可選 `limit`；搜尋使用者名稱或暱稱前綴。
