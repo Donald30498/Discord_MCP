@@ -1,4 +1,4 @@
-# Discord HTTP API 覆蓋清單
+﻿# Discord HTTP API 覆蓋清單
 
 此清單是具名 MCP 工具的待辦盤點，不代表下列操作都能使用 Bot token。每項操作須對照 Discord 正式文件確認 Bot 適用性、參數與回應。
 
@@ -15,23 +15,23 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /applications/@me | get_my_application | 待核對 | 未實作 |
-| PATCH | /applications/@me | update_my_application | 待核對 | 未實作 |
-| GET | /applications/{application_id} | get_application | 待核對 | 未實作 |
-| PATCH | /applications/{application_id} | update_application | 待核對 | 未實作 |
+| GET | /applications/@me | get_my_application | Bot 可用 | 已實作：`application_get_current` |
+| PATCH | /applications/@me | update_my_application | Bot 可用 | 已實作：`application_modify_current` |
+| GET | /applications/{application_id} | get_application | 待核對 | 預覽規格路由；正式文件未列為公開 Bot 端點 |
+| PATCH | /applications/{application_id} | update_application | 待核對 | 預覽規格路由；正式文件未列為公開 Bot 端點 |
 | GET | /applications/{application_id}/activity-instances/{instance_id} | applications_get_activity_instance | 待核對 | 未實作 |
-| POST | /applications/{application_id}/attachment | upload_application_attachment | 待核對 | 未實作 |
+| POST | /applications/{application_id}/attachment | upload_application_attachment | 待核對 | 預覽規格路由；正式文件未列此公開端點 |
 | GET | /applications/{application_id}/commands | list_application_commands | Bot 可用 | 已實作：`application_command_list` |
 | POST | /applications/{application_id}/commands | create_application_command | Bot 可用 | 已實作：`application_command_create` |
 | PUT | /applications/{application_id}/commands | bulk_set_application_commands | Bot 可用 | 已實作：`application_command_bulk_overwrite` |
 | DELETE | /applications/{application_id}/commands/{command_id} | delete_application_command | Bot 可用 | 已實作：`application_command_delete` |
 | GET | /applications/{application_id}/commands/{command_id} | get_application_command | Bot 可用 | 已實作：`application_command_get` |
 | PATCH | /applications/{application_id}/commands/{command_id} | update_application_command | Bot 可用 | 已實作：`application_command_modify` |
-| GET | /applications/{application_id}/emojis | list_application_emojis | 待核對 | 未實作 |
-| POST | /applications/{application_id}/emojis | create_application_emoji | 待核對 | 未實作 |
-| DELETE | /applications/{application_id}/emojis/{emoji_id} | delete_application_emoji | 待核對 | 未實作 |
-| GET | /applications/{application_id}/emojis/{emoji_id} | get_application_emoji | 待核對 | 未實作 |
-| PATCH | /applications/{application_id}/emojis/{emoji_id} | update_application_emoji | 待核對 | 未實作 |
+| GET | /applications/{application_id}/emojis | list_application_emojis | Bot 可用 | 已實作：`application_emoji_list` |
+| POST | /applications/{application_id}/emojis | create_application_emoji | Bot 可用 | 已實作：`application_emoji_create` |
+| DELETE | /applications/{application_id}/emojis/{emoji_id} | delete_application_emoji | Bot 可用 | 已實作：`application_emoji_delete` |
+| GET | /applications/{application_id}/emojis/{emoji_id} | get_application_emoji | Bot 可用 | 已實作：`application_emoji_get` |
+| PATCH | /applications/{application_id}/emojis/{emoji_id} | update_application_emoji | Bot 可用 | 已實作：`application_emoji_modify` |
 | GET | /applications/{application_id}/entitlements | get_entitlements | 待核對 | 未實作 |
 | POST | /applications/{application_id}/entitlements | create_entitlement | 待核對 | 未實作 |
 | DELETE | /applications/{application_id}/entitlements/{entitlement_id} | delete_entitlement | 待核對 | 未實作 |
@@ -46,8 +46,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | get_guild_application_command_permissions | Bot 可用 | 已實作：`guild_application_command_permissions_get` |
 | PUT | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | set_guild_application_command_permissions | 不適用 | 官方要求使用者 OAuth Bearer token；Bot token 不可更新指令權限 |
 | GET | /applications/{application_id}/guilds/{guild_id}/commands/permissions | list_guild_application_command_permissions | Bot 可用 | 已實作：`guild_application_command_permissions_list` |
-| GET | /applications/{application_id}/role-connections/metadata | get_application_role_connections_metadata | 待核對 | 未實作 |
-| PUT | /applications/{application_id}/role-connections/metadata | update_application_role_connections_metadata | 待核對 | 未實作 |
+| GET | /applications/{application_id}/role-connections/metadata | get_application_role_connections_metadata | Bot 可用 | 已實作：`application_role_connection_metadata_get` |
+| PUT | /applications/{application_id}/role-connections/metadata | update_application_role_connections_metadata | Bot 可用 | 已實作：`application_role_connection_metadata_update` |
 
 ## channels（48）
 
