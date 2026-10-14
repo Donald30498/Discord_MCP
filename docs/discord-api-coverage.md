@@ -51,9 +51,9 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| DELETE | /channels/{channel_id} | delete_channel | 待核對 | 未實作 |
+| DELETE | /channels/{channel_id} | delete_channel | Bot 可用，Discord 依頻道類型與權限判定 | 已實作：`channel_delete` |
 | GET | /channels/{channel_id} | get_channel | Bot 可用 | `channel_get` 已實作 |
-| PATCH | /channels/{channel_id} | update_channel | 待核對 | 未實作 |
+| PATCH | /channels/{channel_id} | update_channel | Bot 可用，Discord 依頻道類型與權限判定 | 已實作：`channel_modify` |
 | POST | /channels/{channel_id}/followers | follow_channel | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/invites | list_channel_invites | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/invites | create_channel_invite | 待核對 | 未實作 |
@@ -74,8 +74,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /channels/{channel_id}/messages/pins | list_pins | Bot 可用；新 `/messages/pins` 路由 | 已實作 `message_pin_list` |
 | DELETE | /channels/{channel_id}/messages/pins/{message_id} | delete_pin | Bot 可用；需 Discord `PIN_MESSAGES` | 已實作 `message_unpin` |
 | PUT | /channels/{channel_id}/messages/pins/{message_id} | create_pin | Bot 可用；需 Discord `PIN_MESSAGES` | 已實作 `message_pin` |
-| DELETE | /channels/{channel_id}/permissions/{overwrite_id} | delete_channel_permission_overwrite | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/permissions/{overwrite_id} | set_channel_permission_overwrite | 待核對 | 未實作 |
+| DELETE | /channels/{channel_id}/permissions/{overwrite_id} | delete_channel_permission_overwrite | Bot 可用，僅伺服器頻道 | 已實作：`channel_permission_delete` |
+| PUT | /channels/{channel_id}/permissions/{overwrite_id} | set_channel_permission_overwrite | Bot 可用，僅伺服器頻道 | 已實作：`channel_permission_edit` |
 | GET | /channels/{channel_id}/pins | deprecated_list_pins | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_pin_list` |
 | DELETE | /channels/{channel_id}/pins/{message_id} | deprecated_delete_pin | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_unpin` |
 | PUT | /channels/{channel_id}/pins/{message_id} | deprecated_create_pin | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_pin` |
@@ -125,8 +125,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PUT | /guilds/{guild_id}/bans/{user_id} | ban_user_from_guild | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/bulk-ban | bulk_ban_users_from_guild | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/channels | list_guild_channels | Bot 可用 | `guild_list_channels` 已實作 |
-| PATCH | /guilds/{guild_id}/channels | bulk_update_guild_channels | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/channels | create_guild_channel | 待核對 | 未實作 |
+| PATCH | /guilds/{guild_id}/channels | bulk_update_guild_channels | Bot 可用 | 已實作：`guild_modify_channel_positions` |
+| POST | /guilds/{guild_id}/channels | create_guild_channel | Bot 可用 | 已實作：`guild_create_channel` |
 | GET | /guilds/{guild_id}/emojis | list_guild_emojis | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/emojis | create_guild_emoji | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/emojis/{emoji_id} | delete_guild_emoji | 待核對 | 未實作 |

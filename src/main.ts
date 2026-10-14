@@ -3,6 +3,7 @@ import { serveStdio } from '@modelcontextprotocol/server/stdio';
 import * as z from 'zod/v4';
 import { discordGet } from './discord-http.js';
 import { registerGuildChannelRead } from './register-guild-channel-read.js';
+import { registerChannelWrite } from './register-channel-write.js';
 import { registerGuildMemberRead } from './register-guild-member-read.js';
 import { registerMessageRead } from './register-message-read.js';
 import { registerMessageReactionPinPoll } from './register-message-reaction-pin-poll.js';
@@ -19,6 +20,7 @@ function createServer(): McpServer {
     async () => discordGet('/users/@me'),
   );
   registerGuildChannelRead(server);
+  registerChannelWrite(server);
   registerGuildMemberRead(server);
   registerMessageRead(server);
   registerMessageReactionPinPoll(server);
