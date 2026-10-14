@@ -63,24 +63,24 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /channels/{channel_id}/messages/{message_id} | get_message | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_get` |
 | PATCH | /channels/{channel_id}/messages/{message_id} | update_message | Bot 可用 | `message_edit` 已實作 JSON 與 multipart 檔案上傳 |
 | POST | /channels/{channel_id}/messages/{message_id}/crosspost | crosspost_message | Bot 可用 | `message_crosspost` 已實作；限公告頻道，依 Discord 權限處理 |
-| DELETE | /channels/{channel_id}/messages/{message_id}/reactions | delete_all_message_reactions | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name} | delete_all_message_reactions_by_emoji | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name} | list_message_reactions_by_emoji | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | delete_my_message_reaction | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | add_my_message_reaction | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/{user_id} | delete_user_message_reaction | 待核對 | 未實作 |
+| DELETE | /channels/{channel_id}/messages/{message_id}/reactions | delete_all_message_reactions | Bot 可用；需 Discord `MANAGE_MESSAGES` | 已實作 `message_reaction_delete_all` |
+| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name} | delete_all_message_reactions_by_emoji | Bot 可用；需 Discord `MANAGE_MESSAGES` | 已實作 `message_reaction_delete_emoji` |
+| GET | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name} | list_message_reactions_by_emoji | Bot 可用 | 已實作 `message_reaction_list` |
+| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | delete_my_message_reaction | Bot 可用 | 已實作 `message_reaction_delete_own` |
+| PUT | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | add_my_message_reaction | Bot 可用；需 Discord `READ_MESSAGE_HISTORY`，首次使用表情另需 `ADD_REACTIONS` | 已實作 `message_reaction_create` |
+| DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/{user_id} | delete_user_message_reaction | Bot 可用；需 Discord `MANAGE_MESSAGES` | 已實作 `message_reaction_delete_user` |
 | POST | /channels/{channel_id}/messages/{message_id}/threads | create_thread_from_message | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/messages/bulk-delete | bulk_delete_messages | Bot 可用 | `message_bulk_delete` 已實作；2–100 筆、14 天限制由 Discord 處理 |
-| GET | /channels/{channel_id}/messages/pins | list_pins | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/messages/pins/{message_id} | delete_pin | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/messages/pins/{message_id} | create_pin | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/messages/pins | list_pins | Bot 可用；新 `/messages/pins` 路由 | 已實作 `message_pin_list` |
+| DELETE | /channels/{channel_id}/messages/pins/{message_id} | delete_pin | Bot 可用；需 Discord `PIN_MESSAGES` | 已實作 `message_unpin` |
+| PUT | /channels/{channel_id}/messages/pins/{message_id} | create_pin | Bot 可用；需 Discord `PIN_MESSAGES` | 已實作 `message_pin` |
 | DELETE | /channels/{channel_id}/permissions/{overwrite_id} | delete_channel_permission_overwrite | 待核對 | 未實作 |
 | PUT | /channels/{channel_id}/permissions/{overwrite_id} | set_channel_permission_overwrite | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/pins | deprecated_list_pins | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/pins/{message_id} | deprecated_delete_pin | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/pins/{message_id} | deprecated_create_pin | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/polls/{message_id}/answers/{answer_id} | get_answer_voters | 待核對 | 未實作 |
-| POST | /channels/{channel_id}/polls/{message_id}/expire | poll_expire | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/pins | deprecated_list_pins | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_pin_list` |
+| DELETE | /channels/{channel_id}/pins/{message_id} | deprecated_delete_pin | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_unpin` |
+| PUT | /channels/{channel_id}/pins/{message_id} | deprecated_create_pin | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_pin` |
+| GET | /channels/{channel_id}/polls/{message_id}/answers/{answer_id} | get_answer_voters | Bot 可用 | 已實作 `poll_answer_voters_list` |
+| POST | /channels/{channel_id}/polls/{message_id}/expire | poll_expire | Bot 可用；僅能結束自己建立的投票 | 已實作 `poll_end` |
 | DELETE | /channels/{channel_id}/recipients/{user_id} | delete_group_dm_user | 待核對 | 未實作 |
 | PUT | /channels/{channel_id}/recipients/{user_id} | add_group_dm_user | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/send-soundboard-sound | send_soundboard_sound | 待核對 | 未實作 |
