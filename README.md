@@ -146,3 +146,9 @@ Invite tools: `channel_invite_list`, `channel_invite_create`, `guild_invite_list
 Webhook management tools: `channel_webhook_create`, `channel_webhook_list`, `guild_webhook_list`, `webhook_get`, `webhook_modify`, `webhook_delete`. Webhook token operations are outside the Bot token phase.
 
 User and DM tools: `user_get`, `user_modify_current`, `user_guild_list`, `user_guild_leave`, `dm_create`. The `user_get_current` tool is in the base server; send messages through the message tools after `dm_create` returns a channel ID.
+
+Gateway lookup tools: `gateway_get`, `gateway_bot_get`. Lobby tools: `lobby_create`, `lobby_get`, `lobby_modify`, `lobby_delete`, `lobby_member_add`, `lobby_member_remove`, `lobby_member_bulk_update`, `lobby_message_moderation_metadata_update`, `lobby_member_channel_invite_create`. Social SDK Bearer operations remain listed as exceptions in the coverage inventory.
+
+Remaining channel tools: `channel_follow`, `channel_typing_trigger`, `voice_channel_status_set`.
+
+Additional application information tools: `application_get`, `application_modify`, `application_activity_instance_get`, `oauth_bot_application_get`, `oauth_public_keys_get`.

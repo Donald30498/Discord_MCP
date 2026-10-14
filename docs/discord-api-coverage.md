@@ -19,10 +19,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | --- | --- | --- | --- | --- |
 | GET | /applications/@me | get_my_application | Bot 可用 | 已實作：`application_get_current` |
 | PATCH | /applications/@me | update_my_application | Bot 可用 | 已實作：`application_modify_current` |
-| GET | /applications/{application_id} | get_application | 待核對 | 預覽規格路由；正式文件未列為公開 Bot 端點 |
-| PATCH | /applications/{application_id} | update_application | 待核對 | 預覽規格路由；正式文件未列為公開 Bot 端點 |
-| GET | /applications/{application_id}/activity-instances/{instance_id} | applications_get_activity_instance | 待核對 | 未實作 |
-| POST | /applications/{application_id}/attachment | upload_application_attachment | 待核對 | 預覽規格路由；正式文件未列此公開端點 |
+| GET | /applications/{application_id} | get_application | Bot 可用 | 已實作：`application_get`；測試 Bot 實機 200 |
+| PATCH | /applications/{application_id} | update_application | Bot 可用 | 已實作：`application_modify`；測試 Bot 空物件更新實機 200 |
+| GET | /applications/{application_id}/activity-instances/{instance_id} | applications_get_activity_instance | Bot 可用 | 已實作：`application_activity_instance_get`；假 instance 實機 404 |
+| POST | /applications/{application_id}/attachment | upload_application_attachment | 待核對 | 預覽規格路由；正式文件未列此公開端點及參數，無法可靠建立具名工具 |
 | GET | /applications/{application_id}/commands | list_application_commands | Bot 可用 | 已實作：`application_command_list` |
 | POST | /applications/{application_id}/commands | create_application_command | Bot 可用 | 已實作：`application_command_create` |
 | PUT | /applications/{application_id}/commands | bulk_set_application_commands | Bot 可用 | 已實作：`application_command_bulk_overwrite` |
@@ -58,7 +58,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /channels/{channel_id} | delete_channel | Bot 可用，Discord 依頻道類型與權限判定 | 已實作：`channel_delete` |
 | GET | /channels/{channel_id} | get_channel | Bot 可用 | `channel_get` 已實作 |
 | PATCH | /channels/{channel_id} | update_channel | Bot 可用，Discord 依頻道類型與權限判定 | 已實作：`channel_modify` |
-| POST | /channels/{channel_id}/followers | follow_channel | 待核對 | 未實作 |
+| POST | /channels/{channel_id}/followers | follow_channel | Bot 可用 | 已實作：`channel_follow` |
 | GET | /channels/{channel_id}/invites | list_channel_invites | Bot 可用 | 已實作：`channel_invite_list` |
 | POST | /channels/{channel_id}/invites | create_channel_invite | Bot 可用 | 已實作：`channel_invite_create` |
 | GET | /channels/{channel_id}/messages | list_messages | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_list` |
@@ -85,8 +85,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PUT | /channels/{channel_id}/pins/{message_id} | deprecated_create_pin | 已淘汰；官方建議新 `/messages/pins` 路由 | 不實作；使用 `message_pin` |
 | GET | /channels/{channel_id}/polls/{message_id}/answers/{answer_id} | get_answer_voters | Bot 可用 | 已實作 `poll_answer_voters_list` |
 | POST | /channels/{channel_id}/polls/{message_id}/expire | poll_expire | Bot 可用；僅能結束自己建立的投票 | 已實作 `poll_end` |
-| DELETE | /channels/{channel_id}/recipients/{user_id} | delete_group_dm_user | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/recipients/{user_id} | add_group_dm_user | 待核對 | 未實作 |
+| DELETE | /channels/{channel_id}/recipients/{user_id} | delete_group_dm_user | 不適用 | Group DM 需使用者 OAuth `gdm.join` token |
+| PUT | /channels/{channel_id}/recipients/{user_id} | add_group_dm_user | 不適用 | Group DM 需使用者 OAuth `gdm.join` token |
 | POST | /channels/{channel_id}/send-soundboard-sound | send_soundboard_sound | Bot 可用；語音連線及權限由 Discord 判定 | 已實作 `channel_soundboard_sound_send` |
 | GET | /channels/{channel_id}/thread-members | list_thread_members | Bot 可用；Discord `GUILD_MEMBERS` intent 條件 | 已實作 `thread_member_list`，保留 `with_member/after/limit` |
 | DELETE | /channels/{channel_id}/thread-members/@me | leave_thread | Bot 可用；由 Discord 判定封存狀態 | 已實作 `thread_leave` |
@@ -98,9 +98,9 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /channels/{channel_id}/threads/archived/private | list_private_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY`、`MANAGE_THREADS` | 已實作 `thread_list_private_archived`，`before` 為時間 |
 | GET | /channels/{channel_id}/threads/archived/public | list_public_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY` | 已實作 `thread_list_public_archived`，`before` 為時間 |
 | GET | /channels/{channel_id}/threads/search | thread_search | 待核對；正式 Channel 文件未列此操作 | 未實作；預覽規格與正式文件不一致 |
-| POST | /channels/{channel_id}/typing | trigger_typing_indicator | 待核對 | 未實作 |
+| POST | /channels/{channel_id}/typing | trigger_typing_indicator | Bot 可用 | 已實作：`channel_typing_trigger` |
 | GET | /channels/{channel_id}/users/@me/threads/archived/private | list_my_private_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY` | 已實作 `thread_list_joined_private_archived`，`before` 為 thread ID |
-| PUT | /channels/{channel_id}/voice-status | update_voice_channel_status | 待核對 | 未實作 |
+| PUT | /channels/{channel_id}/voice-status | update_voice_channel_status | Bot 可用 | 已實作：`voice_channel_status_set` |
 | GET | /channels/{channel_id}/webhooks | list_channel_webhooks | Bot 可用 | 已實作：`channel_webhook_list` |
 | POST | /channels/{channel_id}/webhooks | create_webhook | Bot 可用 | 已實作：`channel_webhook_create` |
 
@@ -108,8 +108,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /gateway | get_gateway | 待核對 | 未實作 |
-| GET | /gateway/bot | get_bot_gateway | 待核對 | 未實作 |
+| GET | /gateway | get_gateway | Bot 可用 | 已實作：`gateway_get`；此路由亦可免驗證 |
+| GET | /gateway/bot | get_bot_gateway | Bot 可用 | 已實作：`gateway_bot_get` |
 
 ## guilds（91）
 
@@ -145,7 +145,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/members/{user_id} | delete_guild_member | Bot 可用 | 已實作：`guild_member_remove` |
 | GET | /guilds/{guild_id}/members/{user_id} | get_guild_member | Bot 可用 | 已實作：`guild_member_get` |
 | PATCH | /guilds/{guild_id}/members/{user_id} | update_guild_member | Bot 可用 | 已實作：`guild_member_modify` |
-| PUT | /guilds/{guild_id}/members/{user_id} | add_guild_member | 待核對 | 未實作 |
+| PUT | /guilds/{guild_id}/members/{user_id} | add_guild_member | 不適用 | 需另有該使用者的 OAuth `guilds.join` access token |
 | DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | Bot 可用 | 已實作：`guild_member_role_remove` |
 | PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | Bot 可用 | 已實作：`guild_member_role_add` |
 | GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
@@ -211,7 +211,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| POST | /interactions/{interaction_id}/{interaction_token}/callback | create_interaction_response | 待核對 | 未實作 |
+| POST | /interactions/{interaction_id}/{interaction_token}/callback | create_interaction_response | 不適用 | 使用 interaction token，非程序 Bot token |
 
 ## invites（9）
 
@@ -231,40 +231,40 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| POST | /lobbies | create_lobby | 待核對 | 未實作 |
-| PUT | /lobbies | create_or_join_lobby | 待核對 | 未實作 |
-| DELETE | /lobbies/{lobby_id} | delete_lobby | 待核對 | 未實作 |
-| GET | /lobbies/{lobby_id} | get_lobby | 待核對 | 未實作 |
-| PATCH | /lobbies/{lobby_id} | edit_lobby | 待核對 | 未實作 |
-| PATCH | /lobbies/{lobby_id}/channel-linking | edit_lobby_channel_link | 待核對 | 未實作 |
-| DELETE | /lobbies/{lobby_id}/members/@me | leave_lobby | 待核對 | 未實作 |
-| POST | /lobbies/{lobby_id}/members/@me/invites | create_linked_lobby_guild_invite_for_self | 待核對 | 未實作 |
-| DELETE | /lobbies/{lobby_id}/members/{user_id} | delete_lobby_member | 待核對 | 未實作 |
-| PUT | /lobbies/{lobby_id}/members/{user_id} | add_lobby_member | 待核對 | 未實作 |
-| POST | /lobbies/{lobby_id}/members/{user_id}/invites | create_linked_lobby_guild_invite_for_user | 待核對 | 未實作 |
-| POST | /lobbies/{lobby_id}/members/bulk | bulk_update_lobby_members | 待核對 | 未實作 |
-| GET | /lobbies/{lobby_id}/messages | get_lobby_messages | 待核對 | 未實作 |
-| POST | /lobbies/{lobby_id}/messages | create_lobby_message | 待核對 | 未實作 |
-| PUT | /lobbies/{lobby_id}/messages/{message_id}/moderation-metadata | update_lobby_message_external_moderation_metadata | 待核對 | 未實作 |
+| POST | /lobbies | create_lobby | Bot 可用 | 已實作：`lobby_create`；測試 Bot 實機回 403 / 50001 |
+| PUT | /lobbies | create_or_join_lobby | 不適用 | 需 Social SDK `sdk.social_layer` Bearer token |
+| DELETE | /lobbies/{lobby_id} | delete_lobby | Bot 可用 | 已實作：`lobby_delete` |
+| GET | /lobbies/{lobby_id} | get_lobby | Bot 可用 | 已實作：`lobby_get` |
+| PATCH | /lobbies/{lobby_id} | edit_lobby | Bot 可用 | 已實作：`lobby_modify` |
+| PATCH | /lobbies/{lobby_id}/channel-linking | edit_lobby_channel_link | 不適用 | 需 Social SDK Bearer token |
+| DELETE | /lobbies/{lobby_id}/members/@me | leave_lobby | 不適用 | 需使用者 Bearer token |
+| POST | /lobbies/{lobby_id}/members/@me/invites | create_linked_lobby_guild_invite_for_self | 不適用 | 需 Social SDK Bearer token |
+| DELETE | /lobbies/{lobby_id}/members/{user_id} | delete_lobby_member | Bot 可用 | 已實作：`lobby_member_remove` |
+| PUT | /lobbies/{lobby_id}/members/{user_id} | add_lobby_member | Bot 可用 | 已實作：`lobby_member_add` |
+| POST | /lobbies/{lobby_id}/members/{user_id}/invites | create_linked_lobby_guild_invite_for_user | Bot 可用 | 已實作：`lobby_member_channel_invite_create` |
+| POST | /lobbies/{lobby_id}/members/bulk | bulk_update_lobby_members | Bot 可用 | 已實作：`lobby_member_bulk_update` |
+| GET | /lobbies/{lobby_id}/messages | get_lobby_messages | 不適用 | 需 Social SDK `sdk.social_layer` Bearer token |
+| POST | /lobbies/{lobby_id}/messages | create_lobby_message | 不適用 | 需 Social SDK `sdk.social_layer` Bearer token |
+| PUT | /lobbies/{lobby_id}/messages/{message_id}/moderation-metadata | update_lobby_message_external_moderation_metadata | Bot 可用 | 已實作：`lobby_message_moderation_metadata_update` |
 
 ## oauth2（4）
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /oauth2/@me | get_my_oauth2_authorization | 待核對 | 未實作 |
-| GET | /oauth2/applications/@me | get_my_oauth2_application | 待核對 | 未實作 |
-| GET | /oauth2/keys | get_public_keys | 待核對 | 未實作 |
-| GET | /oauth2/userinfo | get_openid_connect_userinfo | 待核對 | 未實作 |
+| GET | /oauth2/@me | get_my_oauth2_authorization | 不適用 | 需 OAuth Bearer 授權資料 |
+| GET | /oauth2/applications/@me | get_my_oauth2_application | Bot 可用 | 已實作：`oauth_bot_application_get`；測試 Bot 實機 200 |
+| GET | /oauth2/keys | get_public_keys | Bot 可用 | 已實作：`oauth_public_keys_get`；此路由亦可公開取得 |
+| GET | /oauth2/userinfo | get_openid_connect_userinfo | 不適用 | 需 OpenID Connect 使用者 Bearer token |
 
 ## partner-sdk（5）
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| PUT | /partner-sdk/dms/{user_id_1}/{user_id_2}/messages/{message_id}/moderation-metadata | update_user_message_external_moderation_metadata | 待核對 | 未實作 |
-| POST | /partner-sdk/provisional-accounts/unmerge | partner_sdk_unmerge_provisional_account | 待核對 | 未實作 |
-| POST | /partner-sdk/provisional-accounts/unmerge/bot | bot_partner_sdk_unmerge_provisional_account | 待核對 | 未實作 |
-| POST | /partner-sdk/token | partner_sdk_token | 待核對 | 未實作 |
-| POST | /partner-sdk/token/bot | bot_partner_sdk_token | 待核對 | 未實作 |
+| PUT | /partner-sdk/dms/{user_id_1}/{user_id_2}/messages/{message_id}/moderation-metadata | update_user_message_external_moderation_metadata | 待核對 | Social SDK 專門端點；正式公開文件未確認 Bot 憑證及請求欄位 |
+| POST | /partner-sdk/provisional-accounts/unmerge | partner_sdk_unmerge_provisional_account | 待核對 | Social SDK 臨時帳號流程；正式公開文件未確認 Bot 憑證及請求欄位 |
+| POST | /partner-sdk/provisional-accounts/unmerge/bot | bot_partner_sdk_unmerge_provisional_account | 待核對 | 名稱含 bot，但正式公開文件未確認憑證及請求欄位 |
+| POST | /partner-sdk/token | partner_sdk_token | 待核對 | Social SDK token 流程；非單純 Bot 操作，正式公開文件待確認 |
+| POST | /partner-sdk/token/bot | bot_partner_sdk_token | 待核對 | 名稱含 bot，但正式公開文件未確認憑證及請求欄位 |
 
 ## skus（2）
 
