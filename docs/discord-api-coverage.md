@@ -13,6 +13,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 ## applications（33）
 
+正式文件另有 `GET /applications/{application_id}/skus`，預覽 OpenAPI 快照未列；已實作 `sku_list`。
+
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
 | GET | /applications/@me | get_my_application | Bot 可用 | 已實作：`application_get_current` |
@@ -32,11 +34,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /applications/{application_id}/emojis/{emoji_id} | delete_application_emoji | Bot 可用 | 已實作：`application_emoji_delete` |
 | GET | /applications/{application_id}/emojis/{emoji_id} | get_application_emoji | Bot 可用 | 已實作：`application_emoji_get` |
 | PATCH | /applications/{application_id}/emojis/{emoji_id} | update_application_emoji | Bot 可用 | 已實作：`application_emoji_modify` |
-| GET | /applications/{application_id}/entitlements | get_entitlements | 待核對 | 未實作 |
-| POST | /applications/{application_id}/entitlements | create_entitlement | 待核對 | 未實作 |
-| DELETE | /applications/{application_id}/entitlements/{entitlement_id} | delete_entitlement | 待核對 | 未實作 |
-| GET | /applications/{application_id}/entitlements/{entitlement_id} | get_entitlement | 待核對 | 未實作 |
-| POST | /applications/{application_id}/entitlements/{entitlement_id}/consume | consume_entitlement | 待核對 | 未實作 |
+| GET | /applications/{application_id}/entitlements | get_entitlements | Bot 可用 | 已實作：`entitlement_list` |
+| POST | /applications/{application_id}/entitlements | create_entitlement | Bot 可用 | 已實作：`entitlement_create_test`；限 Discord 測試 entitlement |
+| DELETE | /applications/{application_id}/entitlements/{entitlement_id} | delete_entitlement | Bot 可用 | 已實作：`entitlement_delete_test`；限 Discord 測試 entitlement |
+| GET | /applications/{application_id}/entitlements/{entitlement_id} | get_entitlement | Bot 可用 | 已實作：`entitlement_get` |
+| POST | /applications/{application_id}/entitlements/{entitlement_id}/consume | consume_entitlement | Bot 可用 | 已實作：`entitlement_consume` |
 | GET | /applications/{application_id}/guilds/{guild_id}/commands | list_guild_application_commands | Bot 可用 | 已實作：`guild_application_command_list` |
 | POST | /applications/{application_id}/guilds/{guild_id}/commands | create_guild_application_command | Bot 可用 | 已實作：`guild_application_command_create` |
 | PUT | /applications/{application_id}/guilds/{guild_id}/commands | bulk_set_guild_application_commands | Bot 可用 | 已實作：`guild_application_command_bulk_overwrite` |
@@ -268,8 +270,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /skus/{sku_id}/subscriptions | get_sku_subscriptions | 待核對 | 未實作 |
-| GET | /skus/{sku_id}/subscriptions/{subscription_id} | get_sku_subscription | 待核對 | 未實作 |
+| GET | /skus/{sku_id}/subscriptions | get_sku_subscriptions | Bot 可用 | 已實作：`sku_subscription_list`；Bot 查詢需 `user_id` |
+| GET | /skus/{sku_id}/subscriptions/{subscription_id} | get_sku_subscription | Bot 可用 | 已實作：`sku_subscription_get` |
 
 ## soundboard-default-sounds（1）
 

@@ -138,3 +138,5 @@
 執行 `npm test` 可用本機 HTTP 測試伺服器完成 MCP 客戶端到 Discord 請求的全流程測試。
 
 Application tools: `application_get_current`, `application_modify_current`, `application_role_connection_metadata_get`, `application_role_connection_metadata_update`; application emojis: `application_emoji_list`, `application_emoji_create`, `application_emoji_get`, `application_emoji_modify`, `application_emoji_delete`.
+
+Monetization tools: `sku_list`, `entitlement_list`, `entitlement_get`, `entitlement_create_test`, `entitlement_consume`, `entitlement_delete_test`, `sku_subscription_list`, `sku_subscription_get`. The caller supplies Discord pagination parameters; test entitlement writes are Discord's official test operations.
