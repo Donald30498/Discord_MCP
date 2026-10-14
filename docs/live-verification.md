@@ -1,6 +1,6 @@
 # Discord 實機驗收紀錄
 
-2026-10-14 使用測試 Bot 與測試伺服器 `1559785203763912844` 驗證 T11–T25。憑證只從本機且被 Git 忽略的 `docs/token.txt` 讀取，沒有寫入提交或測試輸出。這是當時的驗收紀錄；[合併前的逐票紀錄](https://github.com/Donald30498/Discord_MCP/tree/818e6e9/docs)仍保留在 Git 歷史。現行程式行為以測試與[API 覆蓋清單](discord-api-coverage.md)為準。
+2026-10-14 使用測試 Bot 與測試伺服器 `1559785203763912844` 驗證 T11–T25。憑證只從本機且被 Git 忽略的 `docs/token.txt` 讀取，沒有寫入提交或測試輸出。這是當時的驗收紀錄；[合併前的逐票紀錄](https://github.com/Donald30498/Discord_MCP/tree/818e6e9/docs)仍保留在 Git 歷史。現行行為以程式、測試及 Discord 實際回應為準；[API 覆蓋清單](discord-api-coverage.md)記錄操作的盤點狀態。
 
 T12–T19 的原紀錄載明使用 MCP stdio 客戶端進行實機驗證。T11 與 T20–T25 的原紀錄只載明測試 Bot 的 Discord 實機回應，未記載完整呼叫路徑；對應工具另有 MCP 客戶端至受控 HTTP 回應的自動測試。下表的「未實機驗證」不代表工具沒有實作。
 
