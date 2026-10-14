@@ -23,7 +23,7 @@ test('agent calls confirmed Bot application and OAuth information routes', async
     await client.connect(transport);
     const cases = [
       ['application_get', { application_id: '1' }, 'GET', '/applications/1', null],
-      ['application_modify', { application_id: '1', description: 'Test' }, 'PATCH', '/applications/1', { description: 'Test' }],
+      ['application_modify', { application_id: '1', description: 'Test', flags: 64 }, 'PATCH', '/applications/1', { description: 'Test', flags: 64 }],
       ['application_activity_instance_get', { application_id: '1', instance_id: 'i-1' }, 'GET', '/applications/1/activity-instances/i-1', null],
       ['oauth_bot_application_get', {}, 'GET', '/oauth2/applications/@me', null],
       ['oauth_public_keys_get', {}, 'GET', '/oauth2/keys', null],

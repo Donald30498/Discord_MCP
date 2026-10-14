@@ -63,6 +63,7 @@ export function registerGuildOnboardingTemplateWidget(server: McpServer): void {
     discordRequest('PATCH', `/guilds/${encodeURIComponent(guild_id)}/templates/${encodeURIComponent(code)}`, body));
 
   server.registerTool('guild_template_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete guild template (DELETE /guilds/{guild_id}/templates/{code}).',
     inputSchema: z.strictObject({ ...guild, ...code }),
   }, async ({ guild_id, code }) =>

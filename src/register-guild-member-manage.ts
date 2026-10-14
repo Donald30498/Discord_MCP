@@ -26,6 +26,7 @@ export function registerGuildMemberManage(server: McpServer): void {
   }, async ({ guild_id, audit_log_reason, ...body }) => discordRequest('PATCH', `${guild(guild_id)}/members/@me`, body, audit_log_reason));
 
   server.registerTool('guild_member_remove', {
+    annotations: { destructiveHint: true },
     description: 'Remove (kick) a guild member (DELETE /guilds/{guild_id}/members/{user_id}). This removes the member from the guild.',
     inputSchema: z.strictObject({ guild_id: id, user_id: id, ...reason }),
   }, async ({ guild_id, user_id, audit_log_reason }) => discordRequest('DELETE', member(guild_id, user_id), undefined, audit_log_reason));
@@ -48,6 +49,7 @@ export function registerGuildMemberManage(server: McpServer): void {
   }, async ({ guild_id, user_id }) => discordGet(ban(guild_id, user_id)));
 
   server.registerTool('guild_ban_create', {
+    annotations: { destructiveHint: true },
     description: 'Ban a user from a guild (PUT /guilds/{guild_id}/bans/{user_id}). This removes the member and prevents rejoining.',
     inputSchema: z.strictObject({ guild_id: id, user_id: id,
       delete_message_days: z.number().int().optional(),
@@ -55,11 +57,13 @@ export function registerGuildMemberManage(server: McpServer): void {
   }, async ({ guild_id, user_id, audit_log_reason, ...body }) => discordRequest('PUT', ban(guild_id, user_id), body, audit_log_reason));
 
   server.registerTool('guild_ban_delete', {
+    annotations: { destructiveHint: true },
     description: 'Remove a guild ban (DELETE /guilds/{guild_id}/bans/{user_id}).',
     inputSchema: z.strictObject({ guild_id: id, user_id: id, ...reason }),
   }, async ({ guild_id, user_id, audit_log_reason }) => discordRequest('DELETE', ban(guild_id, user_id), undefined, audit_log_reason));
 
   server.registerTool('guild_ban_bulk_create', {
+    annotations: { destructiveHint: true },
     description: 'Ban up to 200 users from a guild (POST /guilds/{guild_id}/bulk-ban). This removes members and prevents rejoining.',
     inputSchema: z.strictObject({ guild_id: id, user_ids: z.array(id),
       delete_message_seconds: z.number().int().optional(), ...reason }),

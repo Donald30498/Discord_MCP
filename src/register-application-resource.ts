@@ -5,7 +5,7 @@ import { discordRequest } from './discord-http.js';
 const id = z.string();
 const appPath = (applicationId: string) => `/applications/${encodeURIComponent(applicationId)}`;
 const emojiPath = (applicationId: string) => `${appPath(applicationId)}/emojis`;
-export const applicationFields = { description: z.string().optional(), icon: z.string().nullable().optional(),
+export const applicationFields = { description: z.string().optional(), flags: z.number().int().optional(), icon: z.string().nullable().optional(),
   cover_image: z.string().nullable().optional(), tags: z.array(z.string()).optional(),
   install_params: z.record(z.string(), z.unknown()).nullable().optional(),
   interactions_endpoint_url: z.string().nullable().optional(),
@@ -31,6 +31,7 @@ export function registerApplicationResource(server: McpServer): void {
   }, async ({ application_id }) => discordRequest('GET', `${appPath(application_id)}/role-connections/metadata`));
 
   server.registerTool('application_role_connection_metadata_update', {
+    annotations: { destructiveHint: true },
     description: 'Replace application role connection metadata (PUT /applications/{application_id}/role-connections/metadata).',
     inputSchema: z.strictObject({ application_id: id, records: z.array(z.record(z.string(), z.unknown())) }),
   }, async ({ application_id, records }) => discordRequest('PUT', `${appPath(application_id)}/role-connections/metadata`, records));
@@ -57,6 +58,7 @@ export function registerApplicationResource(server: McpServer): void {
     `${emojiPath(application_id)}/${encodeURIComponent(emoji_id)}`, { name }));
 
   server.registerTool('application_emoji_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete application emoji (DELETE /applications/{application_id}/emojis/{emoji_id}).',
     inputSchema: z.strictObject({ application_id: id, emoji_id: id }),
   }, async ({ application_id, emoji_id }) => discordRequest('DELETE',

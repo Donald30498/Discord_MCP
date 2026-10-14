@@ -37,6 +37,7 @@ export function registerWebhook(server: McpServer): void {
     webhookPath(webhook_id), body, audit_log_reason));
 
   server.registerTool('webhook_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a webhook with Bot authorization (DELETE /webhooks/{webhook_id}).',
     inputSchema: z.strictObject({ webhook_id: id, audit_log_reason: z.string().optional() }),
   }, async ({ webhook_id, audit_log_reason }) => discordRequest('DELETE',

@@ -53,6 +53,7 @@ export function registerVoiceStage(server: McpServer): void {
     discordRequest('PATCH', `/stage-instances/${encodeURIComponent(channel_id)}`, body, audit_log_reason));
 
   server.registerTool('stage_instance_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a Stage instance (DELETE /stage-instances/{channel_id}).',
     inputSchema: z.strictObject({ channel_id: id, ...reason }),
   }, async ({ channel_id, audit_log_reason }) =>

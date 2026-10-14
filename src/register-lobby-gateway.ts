@@ -34,6 +34,7 @@ export function registerLobbyGateway(server: McpServer): void {
   }, async ({ lobby_id, ...body }) => discordRequest('PATCH', lobbyPath(lobby_id), body));
 
   server.registerTool('lobby_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a lobby (DELETE /lobbies/{lobby_id}).', inputSchema: z.strictObject({ lobby_id: id }),
   }, async ({ lobby_id }) => discordRequest('DELETE', lobbyPath(lobby_id)));
 
@@ -44,6 +45,7 @@ export function registerLobbyGateway(server: McpServer): void {
     `${lobbyPath(lobby_id)}/members/${encodeURIComponent(user_id)}`, body));
 
   server.registerTool('lobby_member_remove', {
+    annotations: { destructiveHint: true },
     description: 'Remove a lobby member (DELETE /lobbies/{lobby_id}/members/{user_id}).',
     inputSchema: z.strictObject({ lobby_id: id, user_id: id }),
   }, async ({ lobby_id, user_id }) => discordRequest('DELETE',

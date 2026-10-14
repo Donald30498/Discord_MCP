@@ -51,6 +51,7 @@ export function registerInvite(server: McpServer): void {
   }, async ({ code, ...query }) => discordRequest('GET', `${invitePath(code)}${params(query)}`));
 
   server.registerTool('invite_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete invite (DELETE /invites/{code}).',
     inputSchema: z.strictObject({ code: id, audit_log_reason: z.string().optional() }),
   }, async ({ code, audit_log_reason }) => discordRequest('DELETE', invitePath(code), undefined, audit_log_reason));
@@ -66,6 +67,7 @@ export function registerInvite(server: McpServer): void {
   }, async ({ code }) => discordRequest('GET', `${targetPath(code)}/job-status`));
 
   server.registerTool('invite_target_user_replace', {
+    annotations: { destructiveHint: true },
     description: 'Replace invite target users from a local CSV file (PUT /invites/{code}/target-users).',
     inputSchema: z.strictObject({ code: id, target_users_file_path: z.string() }),
   }, async ({ code, target_users_file_path }) => discordRequest('PUT', targetPath(code),
@@ -77,12 +79,14 @@ export function registerInvite(server: McpServer): void {
   }, async ({ code, user_id }) => discordRequest('PUT', `${targetPath(code)}/${encodeURIComponent(user_id)}`));
 
   server.registerTool('invite_target_user_remove', {
+    annotations: { destructiveHint: true },
     description: 'Remove one invite target user (DELETE /invites/{code}/target-users/{user_id}).',
     inputSchema: z.strictObject({ code: id, user_id: id }),
   }, async ({ code, user_id }) => discordRequest('DELETE', `${targetPath(code)}/${encodeURIComponent(user_id)}`));
 
   for (const [name, suffix] of [['invite_target_user_bulk_add', 'bulk-add'], ['invite_target_user_bulk_remove', 'bulk-delete']] as const) {
     server.registerTool(name, {
+      ...(name === 'invite_target_user_bulk_remove' ? { annotations: { destructiveHint: true } } : {}),
       description: `${suffix} invite target users (POST /invites/{code}/target-users/${suffix}).`,
       inputSchema: z.strictObject({ code: id, user_ids: z.array(id) }),
     }, async ({ code, user_ids }) => discordRequest('POST', `${targetPath(code)}/${suffix}`, { user_ids }));

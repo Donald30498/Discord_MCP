@@ -27,7 +27,7 @@ test('application metadata and emojis pass through named MCP tools', async () =>
     await client.connect(transport);
     const cases = [
       ['application_get_current', {}, 'GET', '/applications/@me', null],
-      ['application_modify_current', { description: 'bot' }, 'PATCH', '/applications/@me', { description: 'bot' }],
+      ['application_modify_current', { description: 'bot', flags: 64 }, 'PATCH', '/applications/@me', { description: 'bot', flags: 64 }],
       ['application_role_connection_metadata_get', { application_id: '1' }, 'GET', '/applications/1/role-connections/metadata', null],
       ['application_role_connection_metadata_update', { application_id: '1', records: [{ key: 'wins', name: 'Wins', description: 'Wins', type: 2 }] }, 'PUT', '/applications/1/role-connections/metadata', [{ key: 'wins', name: 'Wins', description: 'Wins', type: 2 }]],
       ['application_emoji_list', { application_id: '1' }, 'GET', '/applications/1/emojis', null],

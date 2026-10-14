@@ -35,6 +35,7 @@ export function registerApplicationCommands(server: McpServer): void {
   }, async ({ application_id, ...body }) => discordRequest('POST', globalPath(application_id), body));
 
   server.registerTool('application_command_bulk_overwrite', {
+    annotations: { destructiveHint: true },
     description: 'Overwrite global application commands (PUT /applications/{application_id}/commands).',
     inputSchema: z.strictObject({ application_id: id, commands: z.array(jsonObject) }),
   }, async ({ application_id, commands }) => discordRequest('PUT', globalPath(application_id), commands));
@@ -52,6 +53,7 @@ export function registerApplicationCommands(server: McpServer): void {
     discordRequest('PATCH', `${globalPath(application_id)}/${encodeURIComponent(command_id)}`, body));
 
   server.registerTool('application_command_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a global application command (DELETE /applications/{application_id}/commands/{command_id}).',
     inputSchema: z.strictObject({ application_id: id, command_id: id }),
   }, async ({ application_id, command_id }) =>
@@ -70,6 +72,7 @@ export function registerApplicationCommands(server: McpServer): void {
     discordRequest('POST', guildPath(application_id, guild_id), body));
 
   server.registerTool('guild_application_command_bulk_overwrite', {
+    annotations: { destructiveHint: true },
     description: 'Overwrite guild application commands (PUT /applications/{application_id}/guilds/{guild_id}/commands).',
     inputSchema: z.strictObject({ application_id: id, guild_id: id, commands: z.array(jsonObject) }),
   }, async ({ application_id, guild_id, commands }) =>
@@ -88,6 +91,7 @@ export function registerApplicationCommands(server: McpServer): void {
     discordRequest('PATCH', `${guildPath(application_id, guild_id)}/${encodeURIComponent(command_id)}`, body));
 
   server.registerTool('guild_application_command_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild application command (DELETE /applications/{application_id}/guilds/{guild_id}/commands/{command_id}).',
     inputSchema: z.strictObject({ application_id: id, guild_id: id, command_id: id }),
   }, async ({ application_id, guild_id, command_id }) =>
