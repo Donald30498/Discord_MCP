@@ -24,5 +24,12 @@
 - `guild_member_search`：`guild_id`、`query`，可選 `limit`；搜尋使用者名稱或暱稱前綴。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
+- `message_create`：`channel_id` 加上 Discord 建立訊息的 JSON 欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`；呼叫 `POST /channels/{channel_id}/messages`。
+- `message_edit`：`channel_id`、`message_id` 加上 `content`、`embeds`、`flags`、`allowed_mentions`、`components` 或 `attachments`；呼叫 `PATCH /channels/{channel_id}/messages/{message_id}`。
+- `message_delete`：`channel_id`、`message_id`，可選 `audit_log_reason`；呼叫 `DELETE /channels/{channel_id}/messages/{message_id}`。
+- `message_bulk_delete`：`channel_id`、`messages`（訊息 ID 陣列），可選 `audit_log_reason`；呼叫 `POST /channels/{channel_id}/messages/bulk-delete`。
+- `message_crosspost`：`channel_id`、`message_id`；呼叫 `POST /channels/{channel_id}/messages/{message_id}/crosspost`，適用於公告頻道。
+
+訊息建立與編輯目前使用 JSON；本機附件上傳由後續 T05 補齊。大量刪除的 2–100 筆、14 天限制以及轉送所需頻道與權限由 Discord 判定，工具不做額外預檢。[Discord Message API](https://docs.discord.com/developers/resources/message)
 
 執行 `npm test` 可用本機 HTTP 測試伺服器完成 MCP 客戶端到 Discord 請求的全流程測試。

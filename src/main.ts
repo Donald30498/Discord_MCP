@@ -5,6 +5,7 @@ import { discordGet } from './discord-http.js';
 import { registerGuildChannelRead } from './register-guild-channel-read.js';
 import { registerGuildMemberRead } from './register-guild-member-read.js';
 import { registerMessageRead } from './register-message-read.js';
+import { registerMessageWrite } from './register-message-write.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -19,6 +20,7 @@ function createServer(): McpServer {
   registerGuildChannelRead(server);
   registerGuildMemberRead(server);
   registerMessageRead(server);
+  registerMessageWrite(server);
   return server;
 }
 

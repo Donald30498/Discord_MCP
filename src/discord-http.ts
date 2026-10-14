@@ -4,10 +4,16 @@ if (!token) {
   process.exit(1);
 }
 
-export async function discordGet(path: string) {
+export async function discordRequest(method: string, path: string, requestBody?: unknown, auditLogReason?: string) {
   const baseUrl = process.env.DISCORD_API_BASE_URL ?? 'https://discord.com/api/v10';
   const response = await fetch(`${baseUrl}${path}`, {
-    headers: { Authorization: `Bot ${token}` },
+    method,
+    headers: {
+      Authorization: `Bot ${token}`,
+      ...(requestBody === undefined ? {} : { 'Content-Type': 'application/json' }),
+      ...(auditLogReason === undefined ? {} : { 'X-Audit-Log-Reason': encodeURIComponent(auditLogReason) }),
+    },
+    ...(requestBody === undefined ? {} : { body: JSON.stringify(requestBody) }),
   });
   const rawBody = await response.text();
   let body: unknown = rawBody;
@@ -26,4 +32,8 @@ export async function discordGet(path: string) {
     content: [{ type: 'text' as const, text: JSON.stringify({ status: response.status, body, headers }) }],
     ...(response.ok ? {} : { isError: true }),
   };
+}
+
+export function discordGet(path: string) {
+  return discordRequest('GET', path);
 }
