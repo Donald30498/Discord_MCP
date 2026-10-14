@@ -301,7 +301,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /users/@me | get_my_user | 待核對 | 未實作 |
+| GET | /users/@me | get_my_user | Bot token 可用 | `user_get_current`（T01） |
 | PATCH | /users/@me | update_my_user | 待核對 | 未實作 |
 | GET | /users/@me/applications/{application_id}/entitlements | get_current_user_application_entitlements | 待核對 | 未實作 |
 | DELETE | /users/@me/applications/{application_id}/role-connection | delete_application_user_role_connection | 待核對 | 未實作 |
