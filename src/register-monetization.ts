@@ -36,12 +36,14 @@ export function registerMonetization(server: McpServer): void {
   }, async ({ application_id, ...body }) => discordRequest('POST', entitlementPath(application_id), body));
 
   server.registerTool('entitlement_consume', {
+    annotations: { destructiveHint: true },
     description: 'Consume an entitlement (POST /applications/{application_id}/entitlements/{entitlement_id}/consume).',
     inputSchema: z.strictObject({ application_id: id, entitlement_id: id }),
   }, async ({ application_id, entitlement_id }) => discordRequest('POST',
     `${entitlementPath(application_id)}/${encodeURIComponent(entitlement_id)}/consume`));
 
   server.registerTool('entitlement_delete_test', {
+    annotations: { destructiveHint: true },
     description: 'Delete a Discord test entitlement (DELETE /applications/{application_id}/entitlements/{entitlement_id}).',
     inputSchema: z.strictObject({ application_id: id, entitlement_id: id }),
   }, async ({ application_id, entitlement_id }) => discordRequest('DELETE',

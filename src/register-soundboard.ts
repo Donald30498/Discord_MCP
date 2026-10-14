@@ -41,6 +41,7 @@ export function registerSoundboard(server: McpServer): void {
     discordRequest('PATCH', `/guilds/${encodeURIComponent(guild_id)}/soundboard-sounds/${encodeURIComponent(sound_id)}`, body, audit_log_reason));
 
   server.registerTool('guild_soundboard_sound_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild soundboard sound (DELETE /guilds/{guild_id}/soundboard-sounds/{sound_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, sound_id: snowflake, ...reason }),
   }, async ({ guild_id, sound_id, audit_log_reason }) =>

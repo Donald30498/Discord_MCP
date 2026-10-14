@@ -48,6 +48,7 @@ export function registerEmojiSticker(server: McpServer): void {
     discordRequest('PATCH', `${guildEmojiPath(guild_id)}/${encodeURIComponent(emoji_id)}`, body, audit_log_reason));
 
   server.registerTool('guild_emoji_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild emoji (DELETE /guilds/{guild_id}/emojis/{emoji_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, emoji_id: snowflake, audit_log_reason: z.string().optional() }),
   }, async ({ guild_id, emoji_id, audit_log_reason }) =>
@@ -94,6 +95,7 @@ export function registerEmojiSticker(server: McpServer): void {
     discordRequest('PATCH', `${guildStickerPath(guild_id)}/${encodeURIComponent(sticker_id)}`, body, audit_log_reason));
 
   server.registerTool('guild_sticker_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild sticker (DELETE /guilds/{guild_id}/stickers/{sticker_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, sticker_id: snowflake, audit_log_reason: z.string().optional() }),
   }, async ({ guild_id, sticker_id, audit_log_reason }) =>

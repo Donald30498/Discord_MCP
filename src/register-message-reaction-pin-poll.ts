@@ -16,11 +16,13 @@ export function registerMessageReactionPinPoll(server: McpServer): void {
   }, async ({ channel_id, message_id, emoji }) => discordRequest('PUT', `${reactionPath(channel_id, message_id, emoji)}/@me`));
 
   server.registerTool('message_reaction_delete_own', {
+    annotations: { destructiveHint: true },
     description: 'Remove the Bot reaction (DELETE /channels/{channel_id}/messages/{message_id}/reactions/{emoji}/@me).',
     inputSchema: z.strictObject(emojiIds),
   }, async ({ channel_id, message_id, emoji }) => discordRequest('DELETE', `${reactionPath(channel_id, message_id, emoji)}/@me`));
 
   server.registerTool('message_reaction_delete_user', {
+    annotations: { destructiveHint: true },
     description: 'Remove a user reaction (DELETE /channels/{channel_id}/messages/{message_id}/reactions/{emoji}/{user_id}).',
     inputSchema: z.strictObject({ ...emojiIds, user_id: z.string() }),
   }, async ({ channel_id, message_id, emoji, user_id }) =>
@@ -38,11 +40,13 @@ export function registerMessageReactionPinPoll(server: McpServer): void {
   });
 
   server.registerTool('message_reaction_delete_all', {
+    annotations: { destructiveHint: true },
     description: 'Remove all reactions from a message (DELETE /channels/{channel_id}/messages/{message_id}/reactions).',
     inputSchema: z.strictObject(ids),
   }, async ({ channel_id, message_id }) => discordRequest('DELETE', `${messagePath(channel_id, message_id)}/reactions`));
 
   server.registerTool('message_reaction_delete_emoji', {
+    annotations: { destructiveHint: true },
     description: 'Remove all reactions for one emoji (DELETE /channels/{channel_id}/messages/{message_id}/reactions/{emoji}).',
     inputSchema: z.strictObject(emojiIds),
   }, async ({ channel_id, message_id, emoji }) => discordRequest('DELETE', reactionPath(channel_id, message_id, emoji)));
@@ -64,6 +68,7 @@ export function registerMessageReactionPinPoll(server: McpServer): void {
     `/channels/${encodeURIComponent(channel_id)}/messages/pins/${encodeURIComponent(message_id)}`, undefined, audit_log_reason));
 
   server.registerTool('message_unpin', {
+    annotations: { destructiveHint: true },
     description: 'Unpin a message (DELETE /channels/{channel_id}/messages/pins/{message_id}).',
     inputSchema: z.strictObject({ ...ids, audit_log_reason: z.string().optional() }),
   }, async ({ channel_id, message_id, audit_log_reason }) => discordRequest('DELETE',
@@ -80,6 +85,7 @@ export function registerMessageReactionPinPoll(server: McpServer): void {
   });
 
   server.registerTool('poll_end', {
+    annotations: { destructiveHint: true },
     description: 'End a poll authored by the Bot (POST /channels/{channel_id}/polls/{message_id}/expire).',
     inputSchema: z.strictObject(ids),
   }, async ({ channel_id, message_id }) => discordRequest('POST',

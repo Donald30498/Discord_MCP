@@ -26,6 +26,7 @@ export function registerUserDm(server: McpServer): void {
   });
 
   server.registerTool('user_guild_leave', {
+    annotations: { destructiveHint: true },
     description: 'Leave a guild as the current Bot user (DELETE /users/@me/guilds/{guild_id}).',
     inputSchema: z.strictObject({ guild_id: id }),
   }, async ({ guild_id }) => discordRequest('DELETE', `/users/@me/guilds/${encodeURIComponent(guild_id)}`));

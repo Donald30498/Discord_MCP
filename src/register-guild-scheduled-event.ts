@@ -61,6 +61,7 @@ export function registerGuildScheduledEvent(server: McpServer): void {
     body, audit_log_reason));
 
   server.registerTool('guild_scheduled_event_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild scheduled event (DELETE /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, ...eventId }),
   }, async ({ guild_id, guild_scheduled_event_id }) => discordRequest('DELETE',

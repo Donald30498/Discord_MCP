@@ -1,8 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server';
 import * as z from 'zod/v4';
-import { readFile } from 'node:fs/promises';
-import { basename } from 'node:path';
 import { discordGet, discordRequest } from './discord-http.js';
+import { messageBody } from './message-multipart.js';
 
 const id = z.string();
 const jsonObject = z.record(z.string(), z.unknown());
@@ -43,14 +42,8 @@ export function registerThread(server: McpServer): void {
     }), applied_tags: z.array(id).optional(),
     files: z.array(z.strictObject({ path: z.string(), filename: z.string().optional() })).optional(), ...reason }),
   }, async ({ channel_id, audit_log_reason, files, ...body }) => {
-    if (!files?.length) return discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/threads`, body, audit_log_reason);
-    const form = new FormData();
-    form.set('payload_json', JSON.stringify(body));
-    for (const [index, file] of files.entries()) {
-      const bytes = await readFile(file.path);
-      form.append(`files[${index}]`, new Blob([new Uint8Array(bytes)]), file.filename ?? basename(file.path));
-    }
-    return discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/threads`, form, audit_log_reason);
+    return discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/threads`,
+      await messageBody(body, files), audit_log_reason);
   });
 
   server.registerTool('guild_thread_list_active', {
@@ -74,6 +67,7 @@ export function registerThread(server: McpServer): void {
     ['thread_member_add', 'PUT', 'user'], ['thread_member_remove', 'DELETE', 'user'],
   ] as const) {
     server.registerTool(name, {
+      ...((name === 'thread_leave' || name === 'thread_member_remove') ? { annotations: { destructiveHint: true } } : {}),
       description: `${method} /channels/{channel_id}/thread-members/${path === 'user' ? '{user_id}' : '@me'}.`,
       inputSchema: path === 'user' ? z.strictObject({ channel_id: id, user_id: id }) : z.strictObject({ channel_id: id }),
     }, async (args) => discordRequest(method, `/channels/${encodeURIComponent(args.channel_id)}/thread-members/${path === 'user' ? encodeURIComponent(String('user_id' in args ? args.user_id : '')) : '@me'}`));

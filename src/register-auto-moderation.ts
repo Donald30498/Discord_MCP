@@ -44,6 +44,7 @@ export function registerAutoModeration(server: McpServer): void {
     discordRequest('PATCH', `/guilds/${encodeURIComponent(guild_id)}/auto-moderation/rules/${encodeURIComponent(rule_id)}`, body, audit_log_reason));
 
   server.registerTool('guild_auto_moderation_rule_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete an Auto Moderation rule (DELETE /guilds/{guild_id}/auto-moderation/rules/{rule_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, rule_id: snowflake, ...auditLogReason }),
   }, async ({ guild_id, rule_id, audit_log_reason }) =>

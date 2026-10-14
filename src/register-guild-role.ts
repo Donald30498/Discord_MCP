@@ -52,6 +52,7 @@ export function registerGuildRole(server: McpServer): void {
     discordRequest('PATCH', `/guilds/${encodeURIComponent(guild_id)}/roles/${encodeURIComponent(role_id)}`, body, audit_log_reason));
 
   server.registerTool('guild_role_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild role (DELETE /guilds/{guild_id}/roles/{role_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, role_id: snowflake, ...auditLogReason }),
   }, async ({ guild_id, role_id, audit_log_reason }) =>
@@ -64,6 +65,7 @@ export function registerGuildRole(server: McpServer): void {
     discordRequest('PUT', `/guilds/${encodeURIComponent(guild_id)}/members/${encodeURIComponent(user_id)}/roles/${encodeURIComponent(role_id)}`, undefined, audit_log_reason));
 
   server.registerTool('guild_member_role_remove', {
+    annotations: { destructiveHint: true },
     description: 'Remove a role from a guild member (DELETE /guilds/{guild_id}/members/{user_id}/roles/{role_id}).',
     inputSchema: z.strictObject({ guild_id: snowflake, user_id: snowflake, role_id: snowflake, ...auditLogReason }),
   }, async ({ guild_id, user_id, role_id, audit_log_reason }) =>

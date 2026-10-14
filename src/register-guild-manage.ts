@@ -50,6 +50,7 @@ export function registerGuildManage(server: McpServer): void {
   }, async ({ guild_id }) => discordGet(`${guild(guild_id)}/integrations`));
 
   server.registerTool('guild_integration_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild integration (DELETE /guilds/{guild_id}/integrations/{integration_id}). This also deletes associated webhooks and removes the associated Bot, if any.',
     inputSchema: z.strictObject({ guild_id: id, integration_id: id, ...reason }),
   }, async ({ guild_id, integration_id, audit_log_reason }) =>
@@ -71,6 +72,7 @@ export function registerGuildManage(server: McpServer): void {
   });
 
   server.registerTool('guild_prune_begin', {
+    annotations: { destructiveHint: true },
     description: 'Begin guild prune (POST /guilds/{guild_id}/prune). This removes inactive members.',
     inputSchema: z.strictObject({ guild_id: id, days: z.number().int().optional(),
       compute_prune_count: z.boolean().optional(), include_roles: z.array(id).optional(),

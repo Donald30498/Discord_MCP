@@ -1,8 +1,7 @@
 import type { McpServer } from '@modelcontextprotocol/server';
 import * as z from 'zod/v4';
-import { readFile } from 'node:fs/promises';
-import { basename } from 'node:path';
 import { discordRequest } from './discord-http.js';
+import { messageBody } from './message-multipart.js';
 
 const jsonObject = z.record(z.string(), z.unknown());
 const file = z.strictObject({ path: z.string(), filename: z.string().optional() });
@@ -32,17 +31,6 @@ const editFields = {
   attachments: z.array(jsonObject).nullable().optional(),
 };
 
-async function messageBody(body: Record<string, unknown>, files?: Array<{ path: string; filename?: string }>) {
-  if (!files?.length) return body;
-  const form = new FormData();
-  form.set('payload_json', JSON.stringify(body));
-  for (const [index, file] of files.entries()) {
-    const bytes = await readFile(file.path);
-    form.append(`files[${index}]`, new Blob([new Uint8Array(bytes)]), file.filename ?? basename(file.path));
-  }
-  return form;
-}
-
 export function registerMessageWrite(server: McpServer): void {
   server.registerTool('message_create', {
     description: 'Create a message (POST /channels/{channel_id}/messages).',
@@ -55,11 +43,13 @@ export function registerMessageWrite(server: McpServer): void {
   }, async ({ channel_id, message_id, files, ...body }) => discordRequest('PATCH', `/channels/${encodeURIComponent(channel_id)}/messages/${encodeURIComponent(message_id)}`, await messageBody(body, files)));
 
   server.registerTool('message_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a message (DELETE /channels/{channel_id}/messages/{message_id}).',
     inputSchema: z.strictObject({ channel_id: z.string(), message_id: z.string(), audit_log_reason: z.string().optional() }),
   }, async ({ channel_id, message_id, audit_log_reason }) => discordRequest('DELETE', `/channels/${encodeURIComponent(channel_id)}/messages/${encodeURIComponent(message_id)}`, undefined, audit_log_reason));
 
   server.registerTool('message_bulk_delete', {
+    annotations: { destructiveHint: true },
     description: 'Bulk delete messages (POST /channels/{channel_id}/messages/bulk-delete).',
     inputSchema: z.strictObject({ channel_id: z.string(), messages: z.array(z.string()), audit_log_reason: z.string().optional() }),
   }, async ({ channel_id, messages, audit_log_reason }) => discordRequest('POST', `/channels/${encodeURIComponent(channel_id)}/messages/bulk-delete`, { messages }, audit_log_reason));

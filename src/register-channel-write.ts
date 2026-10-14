@@ -56,6 +56,7 @@ export function registerChannelWrite(server: McpServer): void {
   }, async ({ channel_id, audit_log_reason, ...body }) => discordRequest('PATCH', `/channels/${encodeURIComponent(channel_id)}`, body, audit_log_reason));
 
   server.registerTool('channel_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a guild channel or thread, or close a DM (DELETE /channels/{channel_id}).',
     inputSchema: z.strictObject({ channel_id: snowflake, ...auditLogReason }),
   }, async ({ channel_id, audit_log_reason }) => discordRequest('DELETE', `/channels/${encodeURIComponent(channel_id)}`, undefined, audit_log_reason));
@@ -68,6 +69,7 @@ export function registerChannelWrite(server: McpServer): void {
   }, async ({ channel_id, overwrite_id, audit_log_reason, ...body }) => discordRequest('PUT', `/channels/${encodeURIComponent(channel_id)}/permissions/${encodeURIComponent(overwrite_id)}`, body, audit_log_reason));
 
   server.registerTool('channel_permission_delete', {
+    annotations: { destructiveHint: true },
     description: 'Delete a channel permission overwrite (DELETE /channels/{channel_id}/permissions/{overwrite_id}).',
     inputSchema: z.strictObject({ channel_id: snowflake, overwrite_id: snowflake, ...auditLogReason }),
   }, async ({ channel_id, overwrite_id, audit_log_reason }) => discordRequest('DELETE', `/channels/${encodeURIComponent(channel_id)}/permissions/${encodeURIComponent(overwrite_id)}`, undefined, audit_log_reason));

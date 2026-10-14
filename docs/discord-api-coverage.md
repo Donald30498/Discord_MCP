@@ -3,7 +3,7 @@
 此清單是具名 MCP 工具的待辦盤點，不代表下列操作都能使用 Bot token。每項操作須對照 Discord 正式文件確認 Bot 適用性、參數與回應。
 
 - 來源：[Discord 官方 OpenAPI v10 規格](https://github.com/discord/discord-api-spec/tree/ed014089afa986f2b532ae081c456a85de074d0c/specs)，固定於 commit ed014089afa986f2b532ae081c456a85de074d0c。
-- 初始盤點：153 條路徑、246 個 HTTP 操作；全部尚未實作。
+- 初始盤點：153 條路徑、246 個 HTTP 操作。下表記錄目前實作狀態。
 - Discord 將此規格標為預覽；若規格與[正式 API 文件](https://docs.discord.com/developers/reference)不同，以正式文件為準，也須補上正式文件中規格缺漏的操作。
 - T12 的 guild 設定、整合、prune、事件應對、預覽、語音區域、vanity URL 以[正式 Guild Resource](https://docs.discord.com/developers/resources/guild)核對；稽核紀錄以[正式 Audit Log Resource](https://docs.discord.com/developers/resources/audit-log)核對。
 - T17 的七項音效板操作以[正式 Soundboard Resource](https://docs.discord.com/developers/resources/soundboard)核對。
