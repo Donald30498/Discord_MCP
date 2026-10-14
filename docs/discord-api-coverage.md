@@ -57,10 +57,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | POST | /channels/{channel_id}/followers | follow_channel | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/invites | list_channel_invites | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/invites | create_channel_invite | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/messages | list_messages | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/messages | list_messages | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_list` |
 | POST | /channels/{channel_id}/messages | create_message | 待核對 | 未實作 |
 | DELETE | /channels/{channel_id}/messages/{message_id} | delete_message | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/messages/{message_id} | get_message | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/messages/{message_id} | get_message | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_get` |
 | PATCH | /channels/{channel_id}/messages/{message_id} | update_message | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/messages/{message_id}/crosspost | crosspost_message | 待核對 | 未實作 |
 | DELETE | /channels/{channel_id}/messages/{message_id}/reactions | delete_all_message_reactions | 待核對 | 未實作 |
