@@ -15,6 +15,7 @@ import { registerGuildOnboardingTemplateWidget } from './register-guild-onboardi
 import { registerGuildManage } from './register-guild-manage.js';
 import { registerAutoModeration } from './register-auto-moderation.js';
 import { registerGuildScheduledEvent } from './register-guild-scheduled-event.js';
+import { registerSoundboard } from './register-soundboard.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -39,6 +40,7 @@ function createServer(): McpServer {
   registerGuildManage(server);
   registerAutoModeration(server);
   registerGuildScheduledEvent(server);
+  registerSoundboard(server);
   return server;
 }
 

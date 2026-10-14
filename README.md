@@ -71,6 +71,16 @@
 - `guild_scheduled_event_users_list`：活動識別欄位，可選 `limit`、`with_member`、`before`、`after`；一次讀取一頁報名使用者。
 
 上述五個工具只管理 [Discord Auto Moderation 規則資源](https://docs.discord.com/developers/resources/auto-moderation)，MCP 不監聽訊息或執行自訂審查判斷。Discord 決定權限及規則欄位的有效性。
+
+音效板工具依 [Discord Soundboard API](https://docs.discord.com/developers/resources/soundboard) 提供：
+
+- `soundboard_default_sound_list`：列出預設音效，無參數。
+- `guild_soundboard_sound_list`、`guild_soundboard_sound_get`：以 `guild_id` 列出伺服器音效；讀取單筆另帶 `sound_id`。
+- `guild_soundboard_sound_create`：`guild_id`、`name`、`sound`（MP3/Ogg base64 data URI），可帶 `volume`、`emoji_id`、`emoji_name`、`audit_log_reason`。
+- `guild_soundboard_sound_modify`、`guild_soundboard_sound_delete`：`guild_id`、`sound_id`，可帶 `audit_log_reason`；修改可帶 `name`、`volume`、`emoji_id`、`emoji_name`。
+- `channel_soundboard_sound_send`：`channel_id`、`sound_id`，可帶 `source_guild_id`。語音連線、音效可用性及權限由 Discord 判定。
+
+建立音效傳入官方 data URI，MCP 不轉檔或判定音訊長度；Discord 回應包含狀態、本文與相關標頭。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
