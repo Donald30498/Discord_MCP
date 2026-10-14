@@ -13,6 +13,7 @@
 ## 工具表
 
 - 第一階段以官方文件中可用 Bot token 呼叫的 Discord HTTP API 操作為範圍。長期目標是涵蓋所有這類操作；無法支援的項目與原因記錄在[覆蓋清單](discord-api-coverage.md)。
+- 互動元件回覆是明確例外：外部模組收到互動事件後，可將該事件的 interaction token 交給具名工具，呼叫初次 callback 或編輯原始互動回覆。這條路徑不使用 Bot Authorization，也不擴大到一般 webhook token 操作；MCP 仍不接收事件或執行模組的判斷規則。
 - 每個已實作的操作提供具名 MCP 工具，其參數與結果貼近對應的 Discord API。工具名稱以資源類別為前綴，覆蓋清單也依類別分組，方便 Agent 查找。已實作工具全部列入 MCP 工具清單。
 - 以 Discord 的[官方 OpenAPI 規格](https://github.com/discord/discord-api-spec)建立待涵蓋清單，再逐項對照[官方 API 文件](https://docs.discord.com/developers/reference)核對工具。官方將規格標為預覽，因此正式文件才是行為判準。
 - 先實作訊息、頻道、伺服器、成員及身分組操作，再逐類補齊其他 Bot HTTP 資源。

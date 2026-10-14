@@ -5,11 +5,24 @@ if (!token) {
 }
 
 export async function discordRequest(method: string, path: string, requestBody?: unknown, auditLogReason?: string, binary = false) {
+  return sendRequest(method, path, requestBody, `Bot ${token}`, auditLogReason, binary);
+}
+
+export async function discordInteractionRequest(method: string, path: string, interactionToken: string, requestBody: unknown) {
+  try {
+    return await sendRequest(method, path, requestBody, undefined, undefined, false, interactionToken);
+  } catch {
+    return { content: [{ type: 'text' as const, text: 'Discord interaction request failed' }], isError: true };
+  }
+}
+
+async function sendRequest(method: string, path: string, requestBody?: unknown, authorization?: string,
+  auditLogReason?: string, binary = false, sensitiveToken?: string) {
   const baseUrl = process.env.DISCORD_API_BASE_URL ?? 'https://discord.com/api/v10';
   const response = await fetch(`${baseUrl}${path}`, {
     method,
     headers: {
-      Authorization: `Bot ${token}`,
+      ...(authorization === undefined ? {} : { Authorization: authorization }),
       ...(requestBody === undefined || requestBody instanceof FormData ? {} : { 'Content-Type': 'application/json' }),
       ...(auditLogReason === undefined ? {} : { 'X-Audit-Log-Reason': encodeURIComponent(auditLogReason) }),
     },
@@ -29,10 +42,15 @@ export async function discordRequest(method: string, path: string, requestBody?:
       name === 'content-type' || name === 'retry-after' || name.startsWith('x-ratelimit-')),
   );
   return {
-    content: [{ type: 'text' as const, text: JSON.stringify({ status: response.status, body, headers,
-      ...(binary && response.ok ? { body_encoding: 'base64' } : {}) }) }],
+    content: [{ type: 'text' as const, text: redact(JSON.stringify({ status: response.status, body, headers,
+      ...(binary && response.ok ? { body_encoding: 'base64' } : {}) }), sensitiveToken) }],
     ...(response.ok ? {} : { isError: true }),
   };
+}
+
+function redact(value: string, token?: string): string {
+  if (!token) return value;
+  return value.replaceAll(token, '[REDACTED]').replaceAll(encodeURIComponent(token), '[REDACTED]');
 }
 
 export function discordGet(path: string) {

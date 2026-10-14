@@ -1,6 +1,6 @@
 # Discord MCP
 
-本機 stdio MCP 伺服器，將 Discord Bot 可用的 HTTP 操作提供為具名工具。現有工具及待完成範圍見[覆蓋清單](docs/discord-api-coverage.md)。
+本機 stdio MCP 伺服器，將 Discord Bot 可用的 HTTP 操作及互動回覆的 token 專用操作提供為具名工具。現有工具及待完成範圍見[覆蓋清單](docs/discord-api-coverage.md)。
 
 文件導覽：[設計決定](docs/discord-mcp-design.md) · [實機驗收與未驗證項目](docs/live-verification.md) · [核心邊界 ADR](docs/adr/0001-discord-mcp-is-an-operation-toolset.md)。
 
@@ -124,6 +124,98 @@
 - `poll_end`：`channel_id`、`message_id`；結束 Bot 自己建立的投票。使用 `message_create` 的 `poll` 欄位建立投票；Discord 不允許 Bot 投票。
 
 `message_create` 與 `message_edit` 可選填 `files: [{ "path": "本機檔案路徑", "filename": "可選的上傳檔名" }]`。有檔案時，工具以 `multipart/form-data` 傳送 `files[0]` 等檔案欄位，其他訊息欄位放入 `payload_json`；沒有檔案時仍使用 JSON。`attachments` 沿用 Discord 官方欄位：新檔案的 `id` 對應 `files[n]` 的索引；編輯時若指定 `attachments`，必須列出所有要保留的舊附件與新附件。工具不限制檔案路徑。大量刪除的 2–100 筆、14 天限制以及轉送所需頻道與權限由 Discord 判定，工具不做額外預檢。[Discord Message API](https://docs.discord.com/developers/resources/message)、[官方上傳說明](https://docs.discord.com/developers/reference#uploading-files)
+
+## 互動元件與回覆
+
+**送出元件。** `message_create` 與 `message_edit` 沿用通用的 `components` 欄位。下列是傳統訊息元件的三個按鈕；`allowed_mentions` 避免範例文字觸發提及：
+
+```json
+{
+  "channel_id": "CHANNEL_ID",
+  "content": "請選擇一項",
+  "allowed_mentions": { "parse": [] },
+  "components": [{ "type": 1, "components": [
+    { "type": 2, "style": 1, "label": "選項 A", "custom_id": "choose:a" },
+    { "type": 2, "style": 2, "label": "選項 B", "custom_id": "choose:b" },
+    { "type": 2, "style": 2, "label": "選項 C", "custom_id": "choose:c" }
+  ] }]
+}
+```
+
+改用訊息元件 **String Select** 單選時，可把上述 `components` 換成：
+
+```json
+[{ "type": 1, "components": [{
+  "type": 3, "custom_id": "choose:menu", "min_values": 1, "max_values": 1,
+  "options": [
+    { "label": "選項 A", "value": "a" },
+    { "label": "選項 B", "value": "b" },
+    { "label": "選項 C", "value": "c" }
+  ]
+}] }]
+```
+
+處理完成後可呼叫 `message_edit`，帶入原本的 `channel_id`、`message_id` 及元件，並對要停用的按鈕或選單設定 `"disabled": true`。例如將選單停用：
+
+```json
+{
+  "channel_id": "CHANNEL_ID", "message_id": "MESSAGE_ID",
+  "content": "已完成選擇", "allowed_mentions": { "parse": [] },
+  "components": [{ "type": 1, "components": [{
+    "type": 3, "custom_id": "choose:menu", "min_values": 1, "max_values": 1,
+    "disabled": true,
+    "options": [
+      { "label": "選項 A", "value": "a" },
+      { "label": "選項 B", "value": "b" },
+      { "label": "選項 C", "value": "c" }
+    ]
+  }] }]
+}
+```
+
+Components V2 訊息需設定 `flags: 32768`，文字改放在 Text Display 元件中；建立時不可同時提供傳統 `content`、`embeds`、`sticker_ids` 或 `poll`。編輯既有訊息並加上此 flag 時，也須依 Discord 規則清空原本的傳統內容。此 flag 設定後不能移除。可直接用於 `message_create`：
+
+```json
+{
+  "channel_id": "CHANNEL_ID",
+  "flags": 32768,
+  "allowed_mentions": { "parse": [] },
+  "components": [
+    { "type": 10, "content": "請選擇一項" },
+    { "type": 1, "components": [
+      { "type": 2, "style": 1, "label": "選項 A", "custom_id": "choose:a" },
+      { "type": 2, "style": 2, "label": "選項 B", "custom_id": "choose:b" },
+      { "type": 2, "style": 2, "label": "選項 C", "custom_id": "choose:c" }
+    ] }
+  ]
+}
+```
+
+**接收點擊事件。** 呼叫模組自行透過 Gateway 或 outgoing webhook 接收互動；兩者對同一 Discord 應用程式互斥。模組從事件取得 `id`、`token`、`application_id`、使用者，以及 `data.custom_id`；String Select 的選值在 `data.values`。模組自行驗證操作者、來源及操作狀態。MCP 不接收事件。
+
+**回覆互動。** 模組應在事件送達後 3 秒內呼叫 `interaction_response_create`。以下使用 callback `type: 7` 更新被點擊的元件訊息；若只回覆點擊者，可改用 `type: 4`，並在 `data` 設定 `flags: 64`（`EPHEMERAL`）：
+
+```json
+{
+  "interaction_id": "INTERACTION_ID",
+  "interaction_token": "INTERACTION_TOKEN",
+  "type": 7,
+  "data": { "content": "已處理", "components": [], "allowed_mentions": { "parse": [] } }
+}
+```
+
+耗時工作先以 `type: 5` defer，例如 `data: { "flags": 64 }`，再呼叫 `interaction_original_response_edit`：
+
+```json
+{
+  "application_id": "APPLICATION_ID",
+  "interaction_token": "INTERACTION_TOKEN",
+  "content": "已完成",
+  "allowed_mentions": { "parse": [] }
+}
+```
+
+`type: 5` 的初次 callback 若帶 `flags`，只可使用 `EPHEMERAL`；原始回覆的公開狀態之後不能更改。`type: 6` 是延後更新原元件訊息，`type: 6`／`7` 僅適用元件互動及符合 Discord 規則的 Modal Submit。互動 token 約 15 分鐘有效。兩個回覆工具從參數取得 token，HTTP 請求不帶 Bot Authorization；結果保留 HTTP 狀態、本文及相關標頭，不自動重試。呼叫模組與 MCP 客戶端應避免記錄 token。[Discord 互動回覆文件](https://docs.discord.com/developers/interactions/receiving-and-responding)、[元件參考](https://docs.discord.com/developers/components/reference)
 
 討論串工具依資源命名：
 

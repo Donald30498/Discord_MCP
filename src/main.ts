@@ -27,6 +27,7 @@ import { registerUserDm } from './register-user-dm.js';
 import { registerLobbyGateway } from './register-lobby-gateway.js';
 import { registerChannelMisc } from './register-channel-misc.js';
 import { registerApplicationExtra } from './register-application-extra.js';
+import { registerInteractionResponse } from './register-interaction-response.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -63,6 +64,7 @@ function createServer(): McpServer {
   registerLobbyGateway(server);
   registerChannelMisc(server);
   registerApplicationExtra(server);
+  registerInteractionResponse(server);
   return server;
 }
 
