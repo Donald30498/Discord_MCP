@@ -142,8 +142,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/members/{user_id} | get_guild_member | Bot 可用 | 已實作：`guild_member_get` |
 | PATCH | /guilds/{guild_id}/members/{user_id} | update_guild_member | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/members/{user_id} | add_guild_member | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | 待核對 | 未實作 |
-| PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | 待核對 | 未實作 |
+| DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | Bot 可用 | 已實作：`guild_member_role_remove` |
+| PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | Bot 可用 | 已實作：`guild_member_role_add` |
 | GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
 | GET | /guilds/{guild_id}/messages/search | guild_search | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對 | 未實作 |
@@ -155,13 +155,13 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/regions | list_guild_voice_regions | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/requests | get_guild_join_requests | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/requests/{request_id} | action_guild_join_request | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/roles | list_guild_roles | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/roles | bulk_update_guild_roles | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/roles | create_guild_role | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/roles/{role_id} | delete_guild_role | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/roles/{role_id} | get_guild_role | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/roles/{role_id} | update_guild_role | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/roles/member-counts | guild_role_member_counts | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/roles | list_guild_roles | Bot 可用 | 已實作：`guild_role_list` |
+| PATCH | /guilds/{guild_id}/roles | bulk_update_guild_roles | Bot 可用 | 已實作：`guild_role_positions_modify` |
+| POST | /guilds/{guild_id}/roles | create_guild_role | Bot 可用 | 已實作：`guild_role_create` |
+| DELETE | /guilds/{guild_id}/roles/{role_id} | delete_guild_role | Bot 可用 | 已實作：`guild_role_delete` |
+| GET | /guilds/{guild_id}/roles/{role_id} | get_guild_role | Bot 可用 | 已實作：`guild_role_get` |
+| PATCH | /guilds/{guild_id}/roles/{role_id} | update_guild_role | Bot 可用 | 已實作：`guild_role_modify` |
+| GET | /guilds/{guild_id}/roles/member-counts | guild_role_member_counts | Bot 可用 | 已實作：`guild_role_member_counts_get` |
 | GET | /guilds/{guild_id}/scheduled-events | list_guild_scheduled_events | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/scheduled-events | create_guild_scheduled_event | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/scheduled-events/{guild_scheduled_event_id} | delete_guild_scheduled_event | 待核對 | 未實作 |
