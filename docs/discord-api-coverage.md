@@ -129,11 +129,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/channels | list_guild_channels | Bot 可用 | `guild_list_channels` 已實作 |
 | PATCH | /guilds/{guild_id}/channels | bulk_update_guild_channels | Bot 可用 | 已實作：`guild_modify_channel_positions` |
 | POST | /guilds/{guild_id}/channels | create_guild_channel | Bot 可用 | 已實作：`guild_create_channel` |
-| GET | /guilds/{guild_id}/emojis | list_guild_emojis | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/emojis | create_guild_emoji | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/emojis/{emoji_id} | delete_guild_emoji | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/emojis/{emoji_id} | get_guild_emoji | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/emojis/{emoji_id} | update_guild_emoji | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/emojis | list_guild_emojis | Bot 可用 | 已實作：`guild_emoji_list` |
+| POST | /guilds/{guild_id}/emojis | create_guild_emoji | Bot 可用 | 已實作：`guild_emoji_create` |
+| DELETE | /guilds/{guild_id}/emojis/{emoji_id} | delete_guild_emoji | Bot 可用 | 已實作：`guild_emoji_delete` |
+| GET | /guilds/{guild_id}/emojis/{emoji_id} | get_guild_emoji | Bot 可用 | 已實作：`guild_emoji_get` |
+| PATCH | /guilds/{guild_id}/emojis/{emoji_id} | update_guild_emoji | Bot 可用 | 已實作：`guild_emoji_modify` |
 | PUT | /guilds/{guild_id}/incident-actions | update_guild_incident_actions | Bot 可用 | 已實作：`guild_incident_actions_modify` |
 | GET | /guilds/{guild_id}/integrations | list_guild_integrations | Bot 可用 | 已實作：`guild_integrations_list` |
 | DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | Bot 可用 | 已實作：`guild_integration_delete` |
@@ -180,11 +180,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/soundboard-sounds/{sound_id} | delete_guild_soundboard_sound | Bot 可用；Discord 判定刪除權限 | 已實作 `guild_soundboard_sound_delete` |
 | GET | /guilds/{guild_id}/soundboard-sounds/{sound_id} | get_guild_soundboard_sound | Bot 可用 | 已實作 `guild_soundboard_sound_get` |
 | PATCH | /guilds/{guild_id}/soundboard-sounds/{sound_id} | update_guild_soundboard_sound | Bot 可用；Discord 判定修改權限 | 已實作 `guild_soundboard_sound_modify` |
-| GET | /guilds/{guild_id}/stickers | list_guild_stickers | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/stickers | create_guild_sticker | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/stickers/{sticker_id} | delete_guild_sticker | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/stickers/{sticker_id} | get_guild_sticker | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/stickers/{sticker_id} | update_guild_sticker | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/stickers | list_guild_stickers | Bot 可用 | 已實作：`guild_sticker_list` |
+| POST | /guilds/{guild_id}/stickers | create_guild_sticker | Bot 可用 | 已實作：`guild_sticker_create` |
+| DELETE | /guilds/{guild_id}/stickers/{sticker_id} | delete_guild_sticker | Bot 可用 | 已實作：`guild_sticker_delete` |
+| GET | /guilds/{guild_id}/stickers/{sticker_id} | get_guild_sticker | Bot 可用 | 已實作：`guild_sticker_get` |
+| PATCH | /guilds/{guild_id}/stickers/{sticker_id} | update_guild_sticker | Bot 可用 | 已實作：`guild_sticker_modify` |
 | GET | /guilds/{guild_id}/templates | list_guild_templates | 可用 | guild_template_list |
 | POST | /guilds/{guild_id}/templates | create_guild_template | 可用 | guild_template_create |
 | DELETE | /guilds/{guild_id}/templates/{code} | delete_guild_template | 可用 | guild_template_delete |
@@ -290,14 +290,14 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /sticker-packs | list_sticker_packs | 待核對 | 未實作 |
-| GET | /sticker-packs/{pack_id} | get_sticker_pack | 待核對 | 未實作 |
+| GET | /sticker-packs | list_sticker_packs | Bot 可用 | 已實作：`sticker_pack_list` |
+| GET | /sticker-packs/{pack_id} | get_sticker_pack | Bot 可用 | 已實作：`sticker_pack_get` |
 
 ## stickers（1）
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /stickers/{sticker_id} | get_sticker | 待核對 | 未實作 |
+| GET | /stickers/{sticker_id} | get_sticker | Bot 可用 | 已實作：`sticker_get` |
 
 ## users（12）
 
