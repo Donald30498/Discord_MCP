@@ -22,6 +22,7 @@ import { registerApplicationCommands } from './register-application-command.js';
 import { registerApplicationResource } from './register-application-resource.js';
 import { registerMonetization } from './register-monetization.js';
 import { registerInvite } from './register-invite.js';
+import { registerWebhook } from './register-webhook.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -53,6 +54,7 @@ function createServer(): McpServer {
   registerApplicationResource(server);
   registerMonetization(server);
   registerInvite(server);
+  registerWebhook(server);
   return server;
 }
 

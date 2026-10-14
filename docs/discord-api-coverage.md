@@ -101,8 +101,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | POST | /channels/{channel_id}/typing | trigger_typing_indicator | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/users/@me/threads/archived/private | list_my_private_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY` | 已實作 `thread_list_joined_private_archived`，`before` 為 thread ID |
 | PUT | /channels/{channel_id}/voice-status | update_voice_channel_status | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/webhooks | list_channel_webhooks | 待核對 | 未實作 |
-| POST | /channels/{channel_id}/webhooks | create_webhook | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/webhooks | list_channel_webhooks | Bot 可用 | 已實作：`channel_webhook_list` |
+| POST | /channels/{channel_id}/webhooks | create_webhook | Bot 可用 | 已實作：`channel_webhook_create` |
 
 ## gateway（2）
 
@@ -198,7 +198,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PATCH | /guilds/{guild_id}/voice-states/@me | update_self_voice_state | Bot 可用 | 已實作：`guild_voice_state_modify_current` |
 | GET | /guilds/{guild_id}/voice-states/{user_id} | get_voice_state | Bot 可用 | 已實作：`guild_voice_state_get` |
 | PATCH | /guilds/{guild_id}/voice-states/{user_id} | update_voice_state | Bot 可用 | 已實作：`guild_voice_state_modify` |
-| GET | /guilds/{guild_id}/webhooks | get_guild_webhooks | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/webhooks | get_guild_webhooks | Bot 可用 | 已實作：`guild_webhook_list` |
 | GET | /guilds/{guild_id}/welcome-screen | get_guild_welcome_screen | 可用 | guild_welcome_screen_get |
 | PATCH | /guilds/{guild_id}/welcome-screen | update_guild_welcome_screen | 可用 | guild_welcome_screen_modify |
 | GET | /guilds/{guild_id}/widget | get_guild_widget_settings | 可用 | guild_widget_settings_get |
@@ -328,18 +328,18 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| DELETE | /webhooks/{webhook_id} | delete_webhook | 待核對 | 未實作 |
-| GET | /webhooks/{webhook_id} | get_webhook | 待核對 | 未實作 |
-| PATCH | /webhooks/{webhook_id} | update_webhook | 待核對 | 未實作 |
-| DELETE | /webhooks/{webhook_id}/{webhook_token} | delete_webhook_by_token | 待核對 | 未實作 |
-| GET | /webhooks/{webhook_id}/{webhook_token} | get_webhook_by_token | 待核對 | 未實作 |
-| PATCH | /webhooks/{webhook_id}/{webhook_token} | update_webhook_by_token | 待核對 | 未實作 |
-| POST | /webhooks/{webhook_id}/{webhook_token} | execute_webhook | 待核對 | 未實作 |
-| POST | /webhooks/{webhook_id}/{webhook_token}/github | execute_github_compatible_webhook | 待核對 | 未實作 |
-| DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/@original | delete_original_webhook_message | 待核對 | 未實作 |
-| GET | /webhooks/{webhook_id}/{webhook_token}/messages/@original | get_original_webhook_message | 待核對 | 未實作 |
-| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/@original | update_original_webhook_message | 待核對 | 未實作 |
-| DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | delete_webhook_message | 待核對 | 未實作 |
-| GET | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | get_webhook_message | 待核對 | 未實作 |
-| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | update_webhook_message | 待核對 | 未實作 |
-| POST | /webhooks/{webhook_id}/{webhook_token}/slack | execute_slack_compatible_webhook | 待核對 | 未實作 |
+| DELETE | /webhooks/{webhook_id} | delete_webhook | Bot 可用 | 已實作：`webhook_delete` |
+| GET | /webhooks/{webhook_id} | get_webhook | Bot 可用 | 已實作：`webhook_get` |
+| PATCH | /webhooks/{webhook_id} | update_webhook | Bot 可用 | 已實作：`webhook_modify` |
+| DELETE | /webhooks/{webhook_id}/{webhook_token} | delete_webhook_by_token | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| GET | /webhooks/{webhook_id}/{webhook_token} | get_webhook_by_token | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| PATCH | /webhooks/{webhook_id}/{webhook_token} | update_webhook_by_token | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| POST | /webhooks/{webhook_id}/{webhook_token} | execute_webhook | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| POST | /webhooks/{webhook_id}/{webhook_token}/github | execute_github_compatible_webhook | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/@original | delete_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| GET | /webhooks/{webhook_id}/{webhook_token}/messages/@original | get_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/@original | update_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | delete_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| GET | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | get_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | update_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| POST | /webhooks/{webhook_id}/{webhook_token}/slack | execute_slack_compatible_webhook | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
