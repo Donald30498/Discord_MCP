@@ -147,8 +147,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/members/search | search_guild_members | Bot 可用 | 已實作：`guild_member_search` |
 | GET | /guilds/{guild_id}/messages/search | guild_search | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/new-member-welcome | get_guild_new_member_welcome | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/onboarding | get_guilds_onboarding | 待核對 | 未實作 |
-| PUT | /guilds/{guild_id}/onboarding | put_guilds_onboarding | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/onboarding | get_guilds_onboarding | 可用 | guild_onboarding_get |
+| PUT | /guilds/{guild_id}/onboarding | put_guilds_onboarding | 可用 | guild_onboarding_modify |
 | GET | /guilds/{guild_id}/preview | get_guild_preview | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/prune | preview_prune_guild | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/prune | prune_guild | 待核對 | 未實作 |
@@ -183,11 +183,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/stickers/{sticker_id} | delete_guild_sticker | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/stickers/{sticker_id} | get_guild_sticker | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/stickers/{sticker_id} | update_guild_sticker | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/templates | list_guild_templates | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/templates | create_guild_template | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/templates/{code} | delete_guild_template | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/templates/{code} | update_guild_template | 待核對 | 未實作 |
-| PUT | /guilds/{guild_id}/templates/{code} | sync_guild_template | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/templates | list_guild_templates | 可用 | guild_template_list |
+| POST | /guilds/{guild_id}/templates | create_guild_template | 可用 | guild_template_create |
+| DELETE | /guilds/{guild_id}/templates/{code} | delete_guild_template | 可用 | guild_template_delete |
+| PATCH | /guilds/{guild_id}/templates/{code} | update_guild_template | 可用 | guild_template_modify |
+| PUT | /guilds/{guild_id}/templates/{code} | sync_guild_template | 可用 | guild_template_sync |
 | GET | /guilds/{guild_id}/threads/active | get_active_guild_threads | Bot 可用 | 已實作 `guild_thread_list_active` |
 | GET | /guilds/{guild_id}/vanity-url | get_guild_vanity_url | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/voice-states/@me | get_self_voice_state | 待核對 | 未實作 |
@@ -195,13 +195,13 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/voice-states/{user_id} | get_voice_state | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/voice-states/{user_id} | update_voice_state | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/webhooks | get_guild_webhooks | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/welcome-screen | get_guild_welcome_screen | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/welcome-screen | update_guild_welcome_screen | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/widget | get_guild_widget_settings | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/widget | update_guild_widget_settings | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/widget.json | get_guild_widget | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/widget.png | get_guild_widget_png | 待核對 | 未實作 |
-| GET | /guilds/templates/{code} | get_guild_template | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/welcome-screen | get_guild_welcome_screen | 可用 | guild_welcome_screen_get |
+| PATCH | /guilds/{guild_id}/welcome-screen | update_guild_welcome_screen | 可用 | guild_welcome_screen_modify |
+| GET | /guilds/{guild_id}/widget | get_guild_widget_settings | 可用 | guild_widget_settings_get |
+| PATCH | /guilds/{guild_id}/widget | update_guild_widget_settings | 可用 | guild_widget_settings_modify |
+| GET | /guilds/{guild_id}/widget.json | get_guild_widget | 可用 | guild_widget_get |
+| GET | /guilds/{guild_id}/widget.png | get_guild_widget_png | 可用 | guild_widget_image_get；成功時 body 為 base64，body_encoding=base64 |
+| GET | /guilds/templates/{code} | get_guild_template | 可用 | guild_template_get |
 
 ## interactions（1）
 

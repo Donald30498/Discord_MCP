@@ -41,6 +41,14 @@
 - `guild_ban_create`：`guild_id`、`user_id`，可選 `delete_message_seconds`、已棄用的 `delete_message_days`、`audit_log_reason`；封鎖成員。
 - `guild_ban_delete`：`guild_id`、`user_id`，可選 `audit_log_reason`；解除封鎖。
 - `guild_ban_bulk_create`：`guild_id`、`user_ids`，可選 `delete_message_seconds`、`audit_log_reason`；批量封鎖，Discord 限制最多 200 位。
+- `guild_onboarding_get`、`guild_onboarding_modify`：`guild_id`；修改可帶官方的 `prompts`、`default_channel_ids`、`enabled`、`mode` 及 `audit_log_reason`。
+- `guild_template_get`：`code`；依範本代碼讀取。
+- `guild_template_list`、`guild_template_create`：`guild_id`；建立另帶 `name`，可選 `description`。
+- `guild_template_sync`、`guild_template_modify`、`guild_template_delete`：`guild_id`、`code`；修改可帶 `name`、`description`。
+- `guild_welcome_screen_get`、`guild_welcome_screen_modify`：`guild_id`；修改可帶 `enabled`、`welcome_channels`、`description` 與 `audit_log_reason`。
+- `guild_widget_settings_get`、`guild_widget_settings_modify`：`guild_id`；修改可帶 `enabled`、`channel_id` 與 `audit_log_reason`。
+- `guild_widget_get`：`guild_id`；讀取公開小工具 JSON。
+- `guild_widget_image_get`：`guild_id`，可選 `style`；讀取公開小工具 PNG。成功結果的 `body` 是原始 PNG 位元組的 base64，另附 `body_encoding: "base64"`、HTTP 狀態與標頭。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
