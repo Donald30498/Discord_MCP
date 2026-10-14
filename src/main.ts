@@ -12,6 +12,7 @@ import { registerMessageReactionPinPoll } from './register-message-reaction-pin-
 import { registerMessageWrite } from './register-message-write.js';
 import { registerThread } from './register-thread.js';
 import { registerGuildManage } from './register-guild-manage.js';
+import { registerAutoModeration } from './register-auto-moderation.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -33,6 +34,7 @@ function createServer(): McpServer {
   registerMessageWrite(server);
   registerThread(server);
   registerGuildManage(server);
+  registerAutoModeration(server);
   return server;
 }
 

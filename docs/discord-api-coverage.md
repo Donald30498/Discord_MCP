@@ -115,11 +115,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id} | get_guild | Bot 可用 | `guild_get` 已實作 |
 | PATCH | /guilds/{guild_id} | update_guild | Bot 可用 | 已實作：`guild_modify` |
 | GET | /guilds/{guild_id}/audit-logs | list_guild_audit_log_entries | Bot 可用 | 已實作：`guild_audit_log_get` |
-| GET | /guilds/{guild_id}/auto-moderation/rules | list_auto_moderation_rules | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/auto-moderation/rules | create_auto_moderation_rule | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | delete_auto_moderation_rule | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | get_auto_moderation_rule | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | update_auto_moderation_rule | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/auto-moderation/rules | list_auto_moderation_rules | 可用 | guild_auto_moderation_rule_list |
+| POST | /guilds/{guild_id}/auto-moderation/rules | create_auto_moderation_rule | 可用 | guild_auto_moderation_rule_create |
+| DELETE | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | delete_auto_moderation_rule | 可用 | guild_auto_moderation_rule_delete |
+| GET | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | get_auto_moderation_rule | 可用 | guild_auto_moderation_rule_get |
+| PATCH | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | update_auto_moderation_rule | 可用 | guild_auto_moderation_rule_modify |
 | GET | /guilds/{guild_id}/bans | list_guild_bans | Bot 可用 | 已實作：`guild_ban_list` |
 | DELETE | /guilds/{guild_id}/bans/{user_id} | unban_user_from_guild | Bot 可用 | 已實作：`guild_ban_delete` |
 | GET | /guilds/{guild_id}/bans/{user_id} | get_guild_ban | Bot 可用 | 已實作：`guild_ban_get` |
