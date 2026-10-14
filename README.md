@@ -144,3 +144,5 @@ Monetization tools: `sku_list`, `entitlement_list`, `entitlement_get`, `entitlem
 Invite tools: `channel_invite_list`, `channel_invite_create`, `guild_invite_list`, `invite_get`, `invite_delete`, plus `invite_target_user_list`, `invite_target_user_job_status`, `invite_target_user_replace`, `invite_target_user_add`, `invite_target_user_remove`, `invite_target_user_bulk_add`, and `invite_target_user_bulk_remove`. CSV upload operations read a caller supplied local path.
 
 Webhook management tools: `channel_webhook_create`, `channel_webhook_list`, `guild_webhook_list`, `webhook_get`, `webhook_modify`, `webhook_delete`. Webhook token operations are outside the Bot token phase.
+
+User and DM tools: `user_get`, `user_modify_current`, `user_guild_list`, `user_guild_leave`, `dm_create`. The `user_get_current` tool is in the base server; send messages through the message tools after `dm_create` returns a channel ID.

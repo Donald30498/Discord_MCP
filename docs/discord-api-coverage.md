@@ -306,17 +306,17 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
 | GET | /users/@me | get_my_user | Bot token 可用 | `user_get_current`（T01） |
-| PATCH | /users/@me | update_my_user | 待核對 | 未實作 |
-| GET | /users/@me/applications/{application_id}/entitlements | get_current_user_application_entitlements | 待核對 | 未實作 |
-| DELETE | /users/@me/applications/{application_id}/role-connection | delete_application_user_role_connection | 待核對 | 未實作 |
-| GET | /users/@me/applications/{application_id}/role-connection | get_application_user_role_connection | 待核對 | 未實作 |
-| PUT | /users/@me/applications/{application_id}/role-connection | update_application_user_role_connection | 待核對 | 未實作 |
-| POST | /users/@me/channels | create_dm | 待核對 | 未實作 |
-| GET | /users/@me/connections | list_my_connections | 待核對 | 未實作 |
-| GET | /users/@me/guilds | list_my_guilds | 待核對 | 未實作 |
-| DELETE | /users/@me/guilds/{guild_id} | leave_guild | 待核對 | 未實作 |
-| GET | /users/@me/guilds/{guild_id}/member | get_my_guild_member | 待核對 | 未實作 |
-| GET | /users/{user_id} | get_user | 待核對 | 未實作 |
+| PATCH | /users/@me | update_my_user | Bot 可用 | 已實作：`user_modify_current` |
+| GET | /users/@me/applications/{application_id}/entitlements | get_current_user_application_entitlements | 不適用 | 使用者 OAuth entitlement，不是 Bot 自身應用程式 entitlement 清單 |
+| DELETE | /users/@me/applications/{application_id}/role-connection | delete_application_user_role_connection | 不適用 | 需要 `role_connections.write` 使用者 OAuth token |
+| GET | /users/@me/applications/{application_id}/role-connection | get_application_user_role_connection | 不適用 | 需要 `role_connections.write` 使用者 OAuth token |
+| PUT | /users/@me/applications/{application_id}/role-connection | update_application_user_role_connection | 不適用 | 需要 `role_connections.write` 使用者 OAuth token |
+| POST | /users/@me/channels | create_dm | Bot 可用 | 已實作：`dm_create`；Group DM 變體需 OAuth `gdm.join` |
+| GET | /users/@me/connections | list_my_connections | 不適用 | 需要 `connections` 使用者 OAuth scope |
+| GET | /users/@me/guilds | list_my_guilds | Bot 可用 | 已實作：`user_guild_list` |
+| DELETE | /users/@me/guilds/{guild_id} | leave_guild | Bot 可用 | 已實作：`user_guild_leave` |
+| GET | /users/@me/guilds/{guild_id}/member | get_my_guild_member | 不適用 | 需要 `guilds.members.read` 使用者 OAuth scope |
+| GET | /users/{user_id} | get_user | Bot 可用 | 已實作：`user_get` |
 
 ## voice（1）
 
