@@ -59,8 +59,8 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /channels/{channel_id} | get_channel | Bot 可用 | `channel_get` 已實作 |
 | PATCH | /channels/{channel_id} | update_channel | Bot 可用，Discord 依頻道類型與權限判定 | 已實作：`channel_modify` |
 | POST | /channels/{channel_id}/followers | follow_channel | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/invites | list_channel_invites | 待核對 | 未實作 |
-| POST | /channels/{channel_id}/invites | create_channel_invite | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/invites | list_channel_invites | Bot 可用 | 已實作：`channel_invite_list` |
+| POST | /channels/{channel_id}/invites | create_channel_invite | Bot 可用 | 已實作：`channel_invite_create` |
 | GET | /channels/{channel_id}/messages | list_messages | Bot 可用；需 Discord 對應頻道讀取權限 | 已實作 `message_list` |
 | POST | /channels/{channel_id}/messages | create_message | Bot 可用 | `message_create` 已實作 JSON 與 multipart 檔案上傳 |
 | DELETE | /channels/{channel_id}/messages/{message_id} | delete_message | Bot 可用 | `message_delete` 已實作 |
@@ -139,7 +139,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PUT | /guilds/{guild_id}/incident-actions | update_guild_incident_actions | Bot 可用 | 已實作：`guild_incident_actions_modify` |
 | GET | /guilds/{guild_id}/integrations | list_guild_integrations | Bot 可用 | 已實作：`guild_integrations_list` |
 | DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | Bot 可用 | 已實作：`guild_integration_delete` |
-| GET | /guilds/{guild_id}/invites | list_guild_invites | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/invites | list_guild_invites | Bot 可用 | 已實作：`guild_invite_list` |
 | GET | /guilds/{guild_id}/members | list_guild_members | Bot 可用；需 GUILD_MEMBERS privileged intent | 已實作：`guild_member_list` |
 | PATCH | /guilds/{guild_id}/members/@me | update_my_guild_member | Bot 可用 | 已實作：`guild_member_modify_current` |
 | DELETE | /guilds/{guild_id}/members/{user_id} | delete_guild_member | Bot 可用 | 已實作：`guild_member_remove` |
@@ -217,15 +217,15 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| DELETE | /invites/{code} | invite_revoke | 待核對 | 未實作 |
-| GET | /invites/{code} | invite_resolve | 待核對 | 未實作 |
-| GET | /invites/{code}/target-users | get_invite_target_users | 待核對 | 未實作 |
-| PUT | /invites/{code}/target-users | update_invite_target_users | 待核對 | 未實作 |
-| DELETE | /invites/{code}/target-users/{user_id} | remove_invite_target_user | 待核對 | 未實作 |
-| PUT | /invites/{code}/target-users/{user_id} | add_invite_target_user | 待核對 | 未實作 |
-| POST | /invites/{code}/target-users/bulk-add | bulk_add_invite_target_users | 待核對 | 未實作 |
-| POST | /invites/{code}/target-users/bulk-delete | bulk_remove_invite_target_users | 待核對 | 未實作 |
-| GET | /invites/{code}/target-users/job-status | get_invite_target_users_job_status | 待核對 | 未實作 |
+| DELETE | /invites/{code} | invite_revoke | Bot 可用 | 已實作：`invite_delete` |
+| GET | /invites/{code} | invite_resolve | Bot 可用 | 已實作：`invite_get` |
+| GET | /invites/{code}/target-users | get_invite_target_users | Bot 可用 | 已實作：`invite_target_user_list`；CSV 文字 |
+| PUT | /invites/{code}/target-users | update_invite_target_users | Bot 可用 | 已實作：`invite_target_user_replace`；本機 CSV 路徑 |
+| DELETE | /invites/{code}/target-users/{user_id} | remove_invite_target_user | Bot 可用 | 已實作：`invite_target_user_remove` |
+| PUT | /invites/{code}/target-users/{user_id} | add_invite_target_user | Bot 可用 | 已實作：`invite_target_user_add` |
+| POST | /invites/{code}/target-users/bulk-add | bulk_add_invite_target_users | Bot 可用 | 已實作：`invite_target_user_bulk_add` |
+| POST | /invites/{code}/target-users/bulk-delete | bulk_remove_invite_target_users | Bot 可用 | 已實作：`invite_target_user_bulk_remove` |
+| GET | /invites/{code}/target-users/job-status | get_invite_target_users_job_status | Bot 可用 | 已實作：`invite_target_user_job_status` |
 
 ## lobbies（15）
 
