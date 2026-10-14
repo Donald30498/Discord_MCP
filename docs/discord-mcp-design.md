@@ -2,6 +2,8 @@
 
 本文記錄初次設計訪談已確認的決定。核心邊界見 [ADR-0001](adr/0001-discord-mcp-is-an-operation-toolset.md)：此 MCP 只是 Discord 操作工具，沒有自己的判斷、規則或額外限制。
 
+此處的 T01–T11 驗收安排是初始計畫；已執行的 T11–T25 結果及未具備的測試條件見[實機驗收紀錄](live-verification.md)。
+
 ## 執行方式與憑證
 
 - 客戶端啟動本機 TypeScript／Node.js MCP 程序；多個 Agent 可各自啟動程序。

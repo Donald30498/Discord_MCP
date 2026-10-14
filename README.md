@@ -2,6 +2,8 @@
 
 本機 stdio MCP 伺服器，將 Discord Bot 可用的 HTTP 操作提供為具名工具。現有工具及待完成範圍見[覆蓋清單](docs/discord-api-coverage.md)。
 
+文件導覽：[設計決定](docs/discord-mcp-design.md) · [實機驗收與未驗證項目](docs/live-verification.md) · [核心邊界 ADR](docs/adr/0001-discord-mcp-is-an-operation-toolset.md)。
+
 ## 啟動
 
 需要 Node.js 20 以上。執行 `npm ci`、`npm run build`，然後在 MCP 客戶端設定：
