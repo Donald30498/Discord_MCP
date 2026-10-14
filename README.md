@@ -29,6 +29,11 @@
 - `message_delete`：`channel_id`、`message_id`，可選 `audit_log_reason`；呼叫 `DELETE /channels/{channel_id}/messages/{message_id}`。
 - `message_bulk_delete`：`channel_id`、`messages`（訊息 ID 陣列），可選 `audit_log_reason`；呼叫 `POST /channels/{channel_id}/messages/bulk-delete`。
 - `message_crosspost`：`channel_id`、`message_id`；呼叫 `POST /channels/{channel_id}/messages/{message_id}/crosspost`，適用於公告頻道。
+- `message_reaction_create`、`message_reaction_delete_own`、`message_reaction_delete_user`、`message_reaction_list`、`message_reaction_delete_emoji`、`message_reaction_delete_all`：訊息反應操作。需要表情的工具傳入 `emoji`（Unicode 或自訂表情 `name:id`），工具會做 URL 編碼；刪除指定使用者反應另帶 `user_id`。列表可帶 `type`、`after`、`limit`，一次只回傳一頁。
+- `message_pin_list`：`channel_id`，可選 `before`（ISO 時間）、`limit`；依新的 `/messages/pins` 路由讀取一頁釘選。
+- `message_pin`、`message_unpin`：`channel_id`、`message_id`，可選 `audit_log_reason`；依新的 `/messages/pins/{message_id}` 路由釘選或取消釘選。
+- `poll_answer_voters_list`：`channel_id`、`message_id`、數字型 `answer_id`，可選 `after`、`limit`；讀取一頁投票者。
+- `poll_end`：`channel_id`、`message_id`；結束 Bot 自己建立的投票。使用 `message_create` 的 `poll` 欄位建立投票；Discord 不允許 Bot 投票。
 
 訊息建立與編輯目前使用 JSON；本機附件上傳由後續 T05 補齊。大量刪除的 2–100 筆、14 天限制以及轉送所需頻道與權限由 Discord 判定，工具不做額外預檢。[Discord Message API](https://docs.discord.com/developers/resources/message)
 
