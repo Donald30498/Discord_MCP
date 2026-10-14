@@ -119,11 +119,11 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | delete_auto_moderation_rule | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | get_auto_moderation_rule | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/auto-moderation/rules/{rule_id} | update_auto_moderation_rule | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/bans | list_guild_bans | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/bans/{user_id} | unban_user_from_guild | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/bans/{user_id} | get_guild_ban | 待核對 | 未實作 |
-| PUT | /guilds/{guild_id}/bans/{user_id} | ban_user_from_guild | 待核對 | 未實作 |
-| POST | /guilds/{guild_id}/bulk-ban | bulk_ban_users_from_guild | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/bans | list_guild_bans | Bot 可用 | 已實作：`guild_ban_list` |
+| DELETE | /guilds/{guild_id}/bans/{user_id} | unban_user_from_guild | Bot 可用 | 已實作：`guild_ban_delete` |
+| GET | /guilds/{guild_id}/bans/{user_id} | get_guild_ban | Bot 可用 | 已實作：`guild_ban_get` |
+| PUT | /guilds/{guild_id}/bans/{user_id} | ban_user_from_guild | Bot 可用 | 已實作：`guild_ban_create` |
+| POST | /guilds/{guild_id}/bulk-ban | bulk_ban_users_from_guild | Bot 可用 | 已實作：`guild_ban_bulk_create` |
 | GET | /guilds/{guild_id}/channels | list_guild_channels | Bot 可用 | `guild_list_channels` 已實作 |
 | PATCH | /guilds/{guild_id}/channels | bulk_update_guild_channels | Bot 可用 | 已實作：`guild_modify_channel_positions` |
 | POST | /guilds/{guild_id}/channels | create_guild_channel | Bot 可用 | 已實作：`guild_create_channel` |
@@ -137,10 +137,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/integrations/{integration_id} | delete_guild_integration | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/invites | list_guild_invites | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/members | list_guild_members | Bot 可用；需 GUILD_MEMBERS privileged intent | 已實作：`guild_member_list` |
-| PATCH | /guilds/{guild_id}/members/@me | update_my_guild_member | 待核對 | 未實作 |
-| DELETE | /guilds/{guild_id}/members/{user_id} | delete_guild_member | 待核對 | 未實作 |
+| PATCH | /guilds/{guild_id}/members/@me | update_my_guild_member | Bot 可用 | 已實作：`guild_member_modify_current` |
+| DELETE | /guilds/{guild_id}/members/{user_id} | delete_guild_member | Bot 可用 | 已實作：`guild_member_remove` |
 | GET | /guilds/{guild_id}/members/{user_id} | get_guild_member | Bot 可用 | 已實作：`guild_member_get` |
-| PATCH | /guilds/{guild_id}/members/{user_id} | update_guild_member | 待核對 | 未實作 |
+| PATCH | /guilds/{guild_id}/members/{user_id} | update_guild_member | Bot 可用 | 已實作：`guild_member_modify` |
 | PUT | /guilds/{guild_id}/members/{user_id} | add_guild_member | 待核對 | 未實作 |
 | DELETE | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | delete_guild_member_role | Bot 可用 | 已實作：`guild_member_role_remove` |
 | PUT | /guilds/{guild_id}/members/{user_id}/roles/{role_id} | add_guild_member_role | Bot 可用 | 已實作：`guild_member_role_add` |
