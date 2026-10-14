@@ -98,6 +98,14 @@
 - `stage_instance_get`、`stage_instance_modify`、`stage_instance_delete`：以 `channel_id` 查詢、修改或刪除舞台實例；修改可帶 `topic`、`privacy_level`、`audit_log_reason`，刪除可帶稽核原因。
 
 語音連線、舞台頻道與主持人權限等前置條件由 Discord 判定；MCP 只轉送操作並回傳 Discord 狀態、本文及標頭。
+
+應用程式指令工具依 [Discord Application Commands 文件](https://docs.discord.com/developers/interactions/application-commands) 提供：
+
+- 全域指令：`application_command_list`、`application_command_create`、`application_command_bulk_overwrite`、`application_command_get`、`application_command_modify`、`application_command_delete`。工具使用 `application_id`；單筆操作另用 `command_id`；列表可帶 `with_localizations`，覆寫接受 `commands` 陣列。
+- 伺服器指令：對應的 `guild_application_command_*` 六個操作，另用 `guild_id`；可讀取權限的 `guild_application_command_permissions_list` 與 `guild_application_command_permissions_get`。
+- 建立與修改接受 Discord 指令欄位，如 `name`、`description`、`type`、`options`、本地化、預設成員權限、整合類型與情境。Discord 判定欄位有效性與操作權限。
+
+更新單一指令權限的官方 `PUT` 需要使用者 OAuth Bearer token，不能只用本程序的 Bot token，因此不在目前工具表中。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。

@@ -21,12 +21,12 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PATCH | /applications/{application_id} | update_application | 待核對 | 未實作 |
 | GET | /applications/{application_id}/activity-instances/{instance_id} | applications_get_activity_instance | 待核對 | 未實作 |
 | POST | /applications/{application_id}/attachment | upload_application_attachment | 待核對 | 未實作 |
-| GET | /applications/{application_id}/commands | list_application_commands | 待核對 | 未實作 |
-| POST | /applications/{application_id}/commands | create_application_command | 待核對 | 未實作 |
-| PUT | /applications/{application_id}/commands | bulk_set_application_commands | 待核對 | 未實作 |
-| DELETE | /applications/{application_id}/commands/{command_id} | delete_application_command | 待核對 | 未實作 |
-| GET | /applications/{application_id}/commands/{command_id} | get_application_command | 待核對 | 未實作 |
-| PATCH | /applications/{application_id}/commands/{command_id} | update_application_command | 待核對 | 未實作 |
+| GET | /applications/{application_id}/commands | list_application_commands | Bot 可用 | 已實作：`application_command_list` |
+| POST | /applications/{application_id}/commands | create_application_command | Bot 可用 | 已實作：`application_command_create` |
+| PUT | /applications/{application_id}/commands | bulk_set_application_commands | Bot 可用 | 已實作：`application_command_bulk_overwrite` |
+| DELETE | /applications/{application_id}/commands/{command_id} | delete_application_command | Bot 可用 | 已實作：`application_command_delete` |
+| GET | /applications/{application_id}/commands/{command_id} | get_application_command | Bot 可用 | 已實作：`application_command_get` |
+| PATCH | /applications/{application_id}/commands/{command_id} | update_application_command | Bot 可用 | 已實作：`application_command_modify` |
 | GET | /applications/{application_id}/emojis | list_application_emojis | 待核對 | 未實作 |
 | POST | /applications/{application_id}/emojis | create_application_emoji | 待核對 | 未實作 |
 | DELETE | /applications/{application_id}/emojis/{emoji_id} | delete_application_emoji | 待核對 | 未實作 |
@@ -37,15 +37,15 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /applications/{application_id}/entitlements/{entitlement_id} | delete_entitlement | 待核對 | 未實作 |
 | GET | /applications/{application_id}/entitlements/{entitlement_id} | get_entitlement | 待核對 | 未實作 |
 | POST | /applications/{application_id}/entitlements/{entitlement_id}/consume | consume_entitlement | 待核對 | 未實作 |
-| GET | /applications/{application_id}/guilds/{guild_id}/commands | list_guild_application_commands | 待核對 | 未實作 |
-| POST | /applications/{application_id}/guilds/{guild_id}/commands | create_guild_application_command | 待核對 | 未實作 |
-| PUT | /applications/{application_id}/guilds/{guild_id}/commands | bulk_set_guild_application_commands | 待核對 | 未實作 |
-| DELETE | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | delete_guild_application_command | 待核對 | 未實作 |
-| GET | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | get_guild_application_command | 待核對 | 未實作 |
-| PATCH | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | update_guild_application_command | 待核對 | 未實作 |
-| GET | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | get_guild_application_command_permissions | 待核對 | 未實作 |
-| PUT | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | set_guild_application_command_permissions | 待核對 | 未實作 |
-| GET | /applications/{application_id}/guilds/{guild_id}/commands/permissions | list_guild_application_command_permissions | 待核對 | 未實作 |
+| GET | /applications/{application_id}/guilds/{guild_id}/commands | list_guild_application_commands | Bot 可用 | 已實作：`guild_application_command_list` |
+| POST | /applications/{application_id}/guilds/{guild_id}/commands | create_guild_application_command | Bot 可用 | 已實作：`guild_application_command_create` |
+| PUT | /applications/{application_id}/guilds/{guild_id}/commands | bulk_set_guild_application_commands | Bot 可用 | 已實作：`guild_application_command_bulk_overwrite` |
+| DELETE | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | delete_guild_application_command | Bot 可用 | 已實作：`guild_application_command_delete` |
+| GET | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | get_guild_application_command | Bot 可用 | 已實作：`guild_application_command_get` |
+| PATCH | /applications/{application_id}/guilds/{guild_id}/commands/{command_id} | update_guild_application_command | Bot 可用 | 已實作：`guild_application_command_modify` |
+| GET | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | get_guild_application_command_permissions | Bot 可用 | 已實作：`guild_application_command_permissions_get` |
+| PUT | /applications/{application_id}/guilds/{guild_id}/commands/{command_id}/permissions | set_guild_application_command_permissions | 不適用 | 官方要求使用者 OAuth Bearer token；Bot token 不可更新指令權限 |
+| GET | /applications/{application_id}/guilds/{guild_id}/commands/permissions | list_guild_application_command_permissions | Bot 可用 | 已實作：`guild_application_command_permissions_list` |
 | GET | /applications/{application_id}/role-connections/metadata | get_application_role_connections_metadata | 待核對 | 未實作 |
 | PUT | /applications/{application_id}/role-connections/metadata | update_application_role_connections_metadata | 待核對 | 未實作 |
 
