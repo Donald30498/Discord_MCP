@@ -41,9 +41,9 @@ async function withMcp(run) {
 test('agent reads guild and channel resources through named MCP tools', async () => {
   await withMcp(async (client, requests) => {
     const { tools } = await client.listTools();
-    assert.deepEqual(tools.map(({ name }) => name), [
-      'user_get_current', 'guild_get', 'guild_list_channels', 'channel_get',
-    ]);
+    for (const name of ['guild_get', 'guild_list_channels', 'channel_get']) {
+      assert.ok(tools.some((tool) => tool.name === name));
+    }
 
     const cases = [
       ['guild_get', { guild_id: '123', with_counts: true }, { id: '123', name: 'Test guild', approximate_member_count: 2 }],

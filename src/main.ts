@@ -3,6 +3,7 @@ import { serveStdio } from '@modelcontextprotocol/server/stdio';
 import * as z from 'zod/v4';
 import { discordGet } from './discord-http.js';
 import { registerGuildChannelRead } from './register-guild-channel-read.js';
+import { registerMessageWrite } from './register-message-write.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -15,6 +16,7 @@ function createServer(): McpServer {
     async () => discordGet('/users/@me'),
   );
   registerGuildChannelRead(server);
+  registerMessageWrite(server);
   return server;
 }
 
