@@ -11,6 +11,7 @@ import { registerMessageRead } from './register-message-read.js';
 import { registerMessageReactionPinPoll } from './register-message-reaction-pin-poll.js';
 import { registerMessageWrite } from './register-message-write.js';
 import { registerThread } from './register-thread.js';
+import { registerGuildOnboardingTemplateWidget } from './register-guild-onboarding-template-widget.js';
 import { registerGuildManage } from './register-guild-manage.js';
 import { registerAutoModeration } from './register-auto-moderation.js';
 
@@ -33,6 +34,7 @@ function createServer(): McpServer {
   registerMessageReactionPinPoll(server);
   registerMessageWrite(server);
   registerThread(server);
+  registerGuildOnboardingTemplateWidget(server);
   registerGuildManage(server);
   registerAutoModeration(server);
   return server;
