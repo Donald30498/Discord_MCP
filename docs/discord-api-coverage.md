@@ -192,10 +192,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | PUT | /guilds/{guild_id}/templates/{code} | sync_guild_template | 可用 | guild_template_sync |
 | GET | /guilds/{guild_id}/threads/active | get_active_guild_threads | Bot 可用 | 已實作 `guild_thread_list_active` |
 | GET | /guilds/{guild_id}/vanity-url | get_guild_vanity_url | Bot 可用 | 已實作：`guild_vanity_url_get` |
-| GET | /guilds/{guild_id}/voice-states/@me | get_self_voice_state | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/voice-states/@me | update_self_voice_state | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/voice-states/{user_id} | get_voice_state | 待核對 | 未實作 |
-| PATCH | /guilds/{guild_id}/voice-states/{user_id} | update_voice_state | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/voice-states/@me | get_self_voice_state | Bot 可用 | 已實作：`guild_voice_state_get_current` |
+| PATCH | /guilds/{guild_id}/voice-states/@me | update_self_voice_state | Bot 可用 | 已實作：`guild_voice_state_modify_current` |
+| GET | /guilds/{guild_id}/voice-states/{user_id} | get_voice_state | Bot 可用 | 已實作：`guild_voice_state_get` |
+| PATCH | /guilds/{guild_id}/voice-states/{user_id} | update_voice_state | Bot 可用 | 已實作：`guild_voice_state_modify` |
 | GET | /guilds/{guild_id}/webhooks | get_guild_webhooks | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/welcome-screen | get_guild_welcome_screen | 可用 | guild_welcome_screen_get |
 | PATCH | /guilds/{guild_id}/welcome-screen | update_guild_welcome_screen | 可用 | guild_welcome_screen_modify |
@@ -281,10 +281,10 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| POST | /stage-instances | create_stage_instance | 待核對 | 未實作 |
-| DELETE | /stage-instances/{channel_id} | delete_stage_instance | 待核對 | 未實作 |
-| GET | /stage-instances/{channel_id} | get_stage_instance | 待核對 | 未實作 |
-| PATCH | /stage-instances/{channel_id} | update_stage_instance | 待核對 | 未實作 |
+| POST | /stage-instances | create_stage_instance | Bot 可用 | 已實作：`stage_instance_create` |
+| DELETE | /stage-instances/{channel_id} | delete_stage_instance | Bot 可用 | 已實作：`stage_instance_delete` |
+| GET | /stage-instances/{channel_id} | get_stage_instance | Bot 可用 | 已實作：`stage_instance_get` |
+| PATCH | /stage-instances/{channel_id} | update_stage_instance | Bot 可用 | 已實作：`stage_instance_modify` |
 
 ## sticker-packs（2）
 
@@ -320,7 +320,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /voice/regions | list_voice_regions | 待核對 | 未實作 |
+| GET | /voice/regions | list_voice_regions | Bot 可用 | 已實作：`voice_regions_list` |
 
 ## webhooks（15）
 

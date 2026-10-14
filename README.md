@@ -88,6 +88,16 @@
 - `channel_soundboard_sound_send`：`channel_id`、`sound_id`，可帶 `source_guild_id`。語音連線、音效可用性及權限由 Discord 判定。
 
 建立音效傳入官方 data URI，MCP 不轉檔或判定音訊長度；Discord 回應包含狀態、本文與相關標頭。
+
+語音與舞台工具依 [Voice API](https://docs.discord.com/developers/resources/voice) 及 [Stage Instance API](https://docs.discord.com/developers/resources/stage-instance) 提供：
+
+- `voice_regions_list`：列出語音區域，無參數。
+- `guild_voice_state_get_current`、`guild_voice_state_get`：以 `guild_id` 讀取目前 Bot 或指定 `user_id` 的語音狀態。
+- `guild_voice_state_modify_current`、`guild_voice_state_modify`：以 `guild_id` 修改目前 Bot 或指定 `user_id` 的語音狀態；保留官方 `channel_id`、`suppress`，目前 Bot 另可帶 `request_to_speak_timestamp`。
+- `stage_instance_create`：以 `channel_id`、`topic` 建立舞台實例，可帶 `privacy_level`、`send_start_notification`、`guild_scheduled_event_id`、`audit_log_reason`。
+- `stage_instance_get`、`stage_instance_modify`、`stage_instance_delete`：以 `channel_id` 查詢、修改或刪除舞台實例；修改可帶 `topic`、`privacy_level`、`audit_log_reason`，刪除可帶稽核原因。
+
+語音連線、舞台頻道與主持人權限等前置條件由 Discord 判定；MCP 只轉送操作並回傳 Discord 狀態、本文及標頭。
 - `message_get`：`channel_id`、`message_id`；呼叫 `GET /channels/{channel_id}/messages/{message_id}`。
 - `message_list`：`channel_id`，可選 `around`、`before`、`after`、`limit`；呼叫 `GET /channels/{channel_id}/messages`，單次只取 Discord 回傳的一頁。
 - `message_create`：`channel_id` 加上 Discord 建立訊息的欄位，例如 `content`、`embeds`、`allowed_mentions`、`message_reference`、`components`、`poll`、`attachments`；呼叫 `POST /channels/{channel_id}/messages`。
