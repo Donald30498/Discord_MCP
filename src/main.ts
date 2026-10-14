@@ -13,6 +13,7 @@ import { registerMessageWrite } from './register-message-write.js';
 import { registerThread } from './register-thread.js';
 import { registerGuildManage } from './register-guild-manage.js';
 import { registerAutoModeration } from './register-auto-moderation.js';
+import { registerSoundboard } from './register-soundboard.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -35,6 +36,7 @@ function createServer(): McpServer {
   registerThread(server);
   registerGuildManage(server);
   registerAutoModeration(server);
+  registerSoundboard(server);
   return server;
 }
 
