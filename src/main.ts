@@ -8,6 +8,7 @@ import { registerGuildMemberRead } from './register-guild-member-read.js';
 import { registerMessageRead } from './register-message-read.js';
 import { registerMessageReactionPinPoll } from './register-message-reaction-pin-poll.js';
 import { registerMessageWrite } from './register-message-write.js';
+import { registerThread } from './register-thread.js';
 
 function createServer(): McpServer {
   const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
@@ -25,6 +26,7 @@ function createServer(): McpServer {
   registerMessageRead(server);
   registerMessageReactionPinPoll(server);
   registerMessageWrite(server);
+  registerThread(server);
   return server;
 }
 

@@ -43,4 +43,18 @@
 
 `message_create` 與 `message_edit` 可選填 `files: [{ "path": "本機檔案路徑", "filename": "可選的上傳檔名" }]`。有檔案時，工具以 `multipart/form-data` 傳送 `files[0]` 等檔案欄位，其他訊息欄位放入 `payload_json`；沒有檔案時仍使用 JSON。`attachments` 沿用 Discord 官方欄位：新檔案的 `id` 對應 `files[n]` 的索引；編輯時若指定 `attachments`，必須列出所有要保留的舊附件與新附件。工具不限制檔案路徑。大量刪除的 2–100 筆、14 天限制以及轉送所需頻道與權限由 Discord 判定，工具不做額外預檢。[Discord Message API](https://docs.discord.com/developers/resources/message)、[官方上傳說明](https://docs.discord.com/developers/reference#uploading-files)
 
+討論串工具依資源命名：
+
+- `thread_start_from_message`：`channel_id`、`message_id`、`name`，可帶 `auto_archive_duration`、`rate_limit_per_user`、`audit_log_reason`。
+- `thread_start_without_message`：`channel_id`、`name`，可帶 `type`、`invitable`、封存時長、慢速模式與稽核原因。
+- `thread_start_forum`：論壇／媒體頻道的 `channel_id`、`name`、首則 `message`；可帶 `applied_tags`、`files`、封存時長、慢速模式與稽核原因。檔案路徑處理與訊息附件相同。
+- `guild_thread_list_active`：`guild_id`；讀取伺服器中所有可見的活躍討論串。
+- `thread_list_public_archived`、`thread_list_private_archived`：`channel_id`，可帶 `before`（ISO 時間）與 `limit`；各取一頁。
+- `thread_list_joined_private_archived`：`channel_id`，可帶 `before`（thread ID）與 `limit`；取已加入的私人封存討論串一頁。
+- `thread_join`、`thread_leave`：`channel_id` 為討論串 ID；加入或離開。
+- `thread_member_add`、`thread_member_remove`、`thread_member_get`：討論串 `channel_id`、`user_id`；讀取工具可帶 `with_member`。
+- `thread_member_list`：討論串 `channel_id`，可帶 `with_member`、`after`、`limit`；Discord v10 在 `with_member=true` 時分頁，需應用程式的 `GUILD_MEMBERS` intent。
+
+討論串修改與刪除使用 `channel_modify`、`channel_delete`；Discord 權限與狀態由 Discord 判定。[官方 Channel Threads API](https://docs.discord.com/developers/resources/channel#start-thread-from-message)
+
 執行 `npm test` 可用本機 HTTP 測試伺服器完成 MCP 客戶端到 Discord 請求的全流程測試。

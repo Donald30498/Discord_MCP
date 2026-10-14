@@ -69,7 +69,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | delete_my_message_reaction | Bot 可用 | 已實作 `message_reaction_delete_own` |
 | PUT | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/@me | add_my_message_reaction | Bot 可用；需 Discord `READ_MESSAGE_HISTORY`，首次使用表情另需 `ADD_REACTIONS` | 已實作 `message_reaction_create` |
 | DELETE | /channels/{channel_id}/messages/{message_id}/reactions/{emoji_name}/{user_id} | delete_user_message_reaction | Bot 可用；需 Discord `MANAGE_MESSAGES` | 已實作 `message_reaction_delete_user` |
-| POST | /channels/{channel_id}/messages/{message_id}/threads | create_thread_from_message | 待核對 | 未實作 |
+| POST | /channels/{channel_id}/messages/{message_id}/threads | create_thread_from_message | Bot 可用；頻道與訊息由 Discord 判定 | 已實作 `thread_start_from_message` |
 | POST | /channels/{channel_id}/messages/bulk-delete | bulk_delete_messages | Bot 可用 | `message_bulk_delete` 已實作；2–100 筆、14 天限制由 Discord 處理 |
 | GET | /channels/{channel_id}/messages/pins | list_pins | Bot 可用；新 `/messages/pins` 路由 | 已實作 `message_pin_list` |
 | DELETE | /channels/{channel_id}/messages/pins/{message_id} | delete_pin | Bot 可用；需 Discord `PIN_MESSAGES` | 已實作 `message_unpin` |
@@ -84,18 +84,18 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /channels/{channel_id}/recipients/{user_id} | delete_group_dm_user | 待核對 | 未實作 |
 | PUT | /channels/{channel_id}/recipients/{user_id} | add_group_dm_user | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/send-soundboard-sound | send_soundboard_sound | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/thread-members | list_thread_members | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/thread-members/@me | leave_thread | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/thread-members/@me | join_thread | 待核對 | 未實作 |
-| DELETE | /channels/{channel_id}/thread-members/{user_id} | delete_thread_member | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/thread-members/{user_id} | get_thread_member | 待核對 | 未實作 |
-| PUT | /channels/{channel_id}/thread-members/{user_id} | add_thread_member | 待核對 | 未實作 |
-| POST | /channels/{channel_id}/threads | create_thread | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/threads/archived/private | list_private_archived_threads | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/threads/archived/public | list_public_archived_threads | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/threads/search | thread_search | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/thread-members | list_thread_members | Bot 可用；Discord `GUILD_MEMBERS` intent 條件 | 已實作 `thread_member_list`，保留 `with_member/after/limit` |
+| DELETE | /channels/{channel_id}/thread-members/@me | leave_thread | Bot 可用；由 Discord 判定封存狀態 | 已實作 `thread_leave` |
+| PUT | /channels/{channel_id}/thread-members/@me | join_thread | Bot 可用；由 Discord 判定封存狀態 | 已實作 `thread_join` |
+| DELETE | /channels/{channel_id}/thread-members/{user_id} | delete_thread_member | Bot 可用；Discord 依管理權限判定 | 已實作 `thread_member_remove` |
+| GET | /channels/{channel_id}/thread-members/{user_id} | get_thread_member | Bot 可用 | 已實作 `thread_member_get` |
+| PUT | /channels/{channel_id}/thread-members/{user_id} | add_thread_member | Bot 可用；Discord 依發言權限判定 | 已實作 `thread_member_add` |
+| POST | /channels/{channel_id}/threads | create_thread | Bot 可用；論壇／媒體頻道須有首則訊息 | 已實作 `thread_start_without_message`、`thread_start_forum`；後者支援附件 |
+| GET | /channels/{channel_id}/threads/archived/private | list_private_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY`、`MANAGE_THREADS` | 已實作 `thread_list_private_archived`，`before` 為時間 |
+| GET | /channels/{channel_id}/threads/archived/public | list_public_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY` | 已實作 `thread_list_public_archived`，`before` 為時間 |
+| GET | /channels/{channel_id}/threads/search | thread_search | 待核對；正式 Channel 文件未列此操作 | 未實作；預覽規格與正式文件不一致 |
 | POST | /channels/{channel_id}/typing | trigger_typing_indicator | 待核對 | 未實作 |
-| GET | /channels/{channel_id}/users/@me/threads/archived/private | list_my_private_archived_threads | 待核對 | 未實作 |
+| GET | /channels/{channel_id}/users/@me/threads/archived/private | list_my_private_archived_threads | Bot 可用；需 Discord `READ_MESSAGE_HISTORY` | 已實作 `thread_list_joined_private_archived`，`before` 為 thread ID |
 | PUT | /channels/{channel_id}/voice-status | update_voice_channel_status | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/webhooks | list_channel_webhooks | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/webhooks | create_webhook | 待核對 | 未實作 |
@@ -188,7 +188,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | DELETE | /guilds/{guild_id}/templates/{code} | delete_guild_template | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/templates/{code} | update_guild_template | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/templates/{code} | sync_guild_template | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/threads/active | get_active_guild_threads | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/threads/active | get_active_guild_threads | Bot 可用 | 已實作 `guild_thread_list_active` |
 | GET | /guilds/{guild_id}/vanity-url | get_guild_vanity_url | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/voice-states/@me | get_self_voice_state | 待核對 | 未實作 |
 | PATCH | /guilds/{guild_id}/voice-states/@me | update_self_voice_state | 待核對 | 未實作 |
