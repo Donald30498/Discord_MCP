@@ -43,7 +43,7 @@ test('agent lists the user tool and reads Bot identity through Discord HTTP', as
     { status: 200, headers: { 'Content-Type': 'application/json', 'X-RateLimit-Remaining': '4' }, body: { id: '123', username: 'testbot', bot: true } },
     async (client, requests) => {
       const { tools } = await client.listTools();
-      assert.deepEqual(tools.map((tool) => tool.name), ['user_get_current']);
+      assert.equal(tools[0].name, 'user_get_current');
       assert.equal(tools[0].inputSchema.type, 'object');
       assert.deepEqual(tools[0].inputSchema.properties, {});
       assert.equal(tools[0].inputSchema.additionalProperties, false);

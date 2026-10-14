@@ -52,7 +52,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
 | DELETE | /channels/{channel_id} | delete_channel | 待核對 | 未實作 |
-| GET | /channels/{channel_id} | get_channel | 待核對 | 未實作 |
+| GET | /channels/{channel_id} | get_channel | Bot 可用 | `channel_get` 已實作 |
 | PATCH | /channels/{channel_id} | update_channel | 待核對 | 未實作 |
 | POST | /channels/{channel_id}/followers | follow_channel | 待核對 | 未實作 |
 | GET | /channels/{channel_id}/invites | list_channel_invites | 待核對 | 未實作 |
@@ -111,7 +111,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| GET | /guilds/{guild_id} | get_guild | 待核對 | 未實作 |
+| GET | /guilds/{guild_id} | get_guild | Bot 可用 | `guild_get` 已實作 |
 | PATCH | /guilds/{guild_id} | update_guild | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/audit-logs | list_guild_audit_log_entries | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/auto-moderation/rules | list_auto_moderation_rules | 待核對 | 未實作 |
@@ -124,7 +124,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | GET | /guilds/{guild_id}/bans/{user_id} | get_guild_ban | 待核對 | 未實作 |
 | PUT | /guilds/{guild_id}/bans/{user_id} | ban_user_from_guild | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/bulk-ban | bulk_ban_users_from_guild | 待核對 | 未實作 |
-| GET | /guilds/{guild_id}/channels | list_guild_channels | 待核對 | 未實作 |
+| GET | /guilds/{guild_id}/channels | list_guild_channels | Bot 可用 | `guild_list_channels` 已實作 |
 | PATCH | /guilds/{guild_id}/channels | bulk_update_guild_channels | 待核對 | 未實作 |
 | POST | /guilds/{guild_id}/channels | create_guild_channel | 待核對 | 未實作 |
 | GET | /guilds/{guild_id}/emojis | list_guild_emojis | 待核對 | 未實作 |
