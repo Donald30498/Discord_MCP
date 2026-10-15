@@ -10,4 +10,4 @@ PRs as a request surface: no.
 
 ## Wayfinding
 
-For `/wayfinder`, use a GitHub issue labelled `wayfinder:map` as the map. Link child tickets as sub-issues where available; otherwise link them in the map and add `Part of #<map>` to each child. Use GitHub issue dependencies for blockers where available; otherwise record `Blocked by: #<number>` in the child issue. Claim a ticket by assigning it to the working developer.
+For `/wayfinder`, create the `wayfinder:map` label if it does not exist, then use a GitHub issue with that label as the map. Link child tickets as sub-issues where available; otherwise link them in the map and add `Part of #<map>` to each child. Use GitHub issue dependencies for blockers where available; otherwise record `Blocked by: #<number>` in the child issue. Claim a ticket by assigning it to the working developer.

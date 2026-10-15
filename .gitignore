@@ -1,2 +1,4 @@
 /docs/token.txt
 /.scratch/
+/node_modules/
+/dist/
