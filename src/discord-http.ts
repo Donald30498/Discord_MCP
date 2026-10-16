@@ -48,9 +48,11 @@ async function sendRequest(method: string, path: string, requestBody?: unknown, 
   };
 }
 
-function redact(value: string, token?: string): string {
-  if (!token) return value;
-  return value.replaceAll(token, '[REDACTED]').replaceAll(encodeURIComponent(token), '[REDACTED]');
+function redact(value: string, sensitiveToken?: string): string {
+  for (const secret of [token, sensitiveToken]) {
+    if (secret) value = value.replaceAll(secret, '[REDACTED]').replaceAll(encodeURIComponent(secret), '[REDACTED]');
+  }
+  return value;
 }
 
 export function discordGet(path: string) {

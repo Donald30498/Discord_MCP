@@ -14,6 +14,27 @@
 
 每個客戶端可各自啟動程序。token 由啟動環境提供，不放在工具參數中。
 
+## 接入 DCenter 本機 MCP
+
+先執行 `npm.cmd ci`、`npm.cmd run build`，再於 DCenter 管理頁登錄一份本機服務；等價的 `POST /v1/mcp-services` 資料如下。請將路徑換成這份專案在主機上的實際絕對路徑：
+
+```json
+{
+  "id": "discord-mcp",
+  "name": "Discord MCP",
+  "version": "0.1.0",
+  "transport": "stdio",
+  "command": "node",
+  "args": ["C:\\Users\\USER\\Desktop\\Discord_MCP\\dist\\main.js"],
+  "cwd": "C:\\Users\\USER\\Desktop\\Discord_MCP",
+  "credentialType": "bot-discord-token"
+}
+```
+
+先在 DCenter 註冊 Bot 並透過管理介面設定該 Bot 的 Discord token。再以 `POST /v1/mcp-connections` 建立 `{ "id": "discord-example-bot", "serviceId": "discord-mcp", "botId": "example-bot" }`；由 DCenter 以這個 Bot 的 token 啟動獨立 MCP 程序。以 `GET /v1/mcp-connections/discord-example-bot/tools` 查看實際列出的工具，最後以 `PUT /v1/bots/example-bot/mcp-grants/discord-example-bot` 提交 `{ "toolNames": ["guild_get"] }`。服務註冊及連線資料均不填 token 原值；管理 API 操作須使用 DCenter 的管理認證。
+
+DCenter 目前只接受授權 `guild_get`、`guild_list_channels`、`channel_get`，由底座控制 Bot AI 可見與可呼叫的範圍；本 MCP 仍向其他標準 MCP 客戶端提供全部既有工具。每個 Bot 建立自己的連線，不能共用另一個 Bot 的 Discord 身分。正式 Bot 經 DCenter 呼叫 Discord 的煙霧測試仍待驗收。
+
 ## 已提供的工具
 
 `user_get_current` 無參數，呼叫 Discord `GET /users/@me`。結果以 JSON 文字包含 `status`、`body`、`headers`；`headers` 保留回應的 `content-type`、`retry-after` 和 `x-ratelimit-*`。Discord 4xx、5xx 與 429 回應也原樣提供狀態與本文，工具不重試。
