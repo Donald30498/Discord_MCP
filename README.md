@@ -16,24 +16,88 @@
 
 ## 接入 DCenter 本機 MCP
 
-先執行 `npm.cmd ci`、`npm.cmd run build`，再於 DCenter 管理頁登錄一份本機服務；等價的 `POST /v1/mcp-services` 資料如下。請將路徑換成這份專案在主機上的實際絕對路徑：
+本節對應 DCenter **0.2.0**，依底座提交 `36ef4dc` 的[管理 API](https://github.com/Donald30498/DCenter/blob/36ef4dc/docs/management-api.md)與[MCP 指南](https://github.com/Donald30498/DCenter/blob/36ef4dc/docs/mcp-development.md)核對。Discord MCP 自身版本仍為 `0.1.0`，不需因底座升級而改成 `0.2.0`。實際端點結構以執行中且已認證的 `GET /v1/openapi.json` 為準。
 
-```json
-{
-  "id": "discord-mcp",
-  "name": "Discord MCP",
-  "version": "0.1.0",
-  "transport": "stdio",
-  "command": "node",
-  "args": ["C:\\Users\\USER\\Desktop\\Discord_MCP\\dist\\main.js"],
-  "cwd": "C:\\Users\\USER\\Desktop\\Discord_MCP",
-  "credentialType": "bot-discord-token"
-}
+底座的 stdio 協定矩陣為 `2025-11-25` 與 `2026-07-28`，以版本協商選擇；這不代表本 MCP 已逐版驗證，實際協商版本仍須記錄。發現失敗時，`MCP_PROTOCOL_UNSUPPORTED` 表示版本不支援、`MCP_NEGOTIATION_FAILED` 表示協商失敗、`MCP_TOOLS_UNAVAILABLE` 表示服務未提供 tools 能力。stdio 的 stdout 僅供協定訊息，診斷輸出使用 stderr；[證據與待驗證範圍](docs/live-verification.md)分開記錄文件核對及執行結果。
+
+0.2.0 不自動遷移舊 MCP 服務、身分、連線與工具授權；升級前備份私有設定，依底座指南重新設定與註冊。先完成 Bot 註冊並在 DCenter 管理頁設定該 Bot 的 Discord token，再依序建立「服務 → 外部安裝／身分 → 連線 → 工具審核 → Bot 授權」。Bot 使用 IPC v3；本 MCP 本身使用標準 stdio，不實作 Bot IPC。
+
+### 1. 建置與管理員工作階段
+
+在 Discord_MCP 專案執行 `npm.cmd ci`、`npm.cmd run build`。以下範例在**管理員 PowerShell** 執行，請替換實際路徑、Bot ID 與管理埠；若使用自訂 `DCENTER_CONFIG`，也須調整私有設定檔路徑。設定檔只在管理員工作階段讀取，不複製到 MCP 或 Bot 專案。
+
+```powershell
+$dcenterRoot = 'C:\Users\USER\Desktop\DCenter'
+$mcpRoot = 'C:\Users\USER\Desktop\Discord_MCP'
+$botId = 'example-bot'
+$base = 'http://127.0.0.1:4317'
+$secret = (Get-Content -LiteralPath (Join-Path $dcenterRoot '.dcenter\config.json') -Raw -Encoding UTF8 | ConvertFrom-Json).managementSecret
+$headers = @{ Authorization = "Bearer $secret" }
+$mcpEntry = (Resolve-Path -LiteralPath (Join-Path $mcpRoot 'dist\main.js')).Path
 ```
 
-先在 DCenter 註冊 Bot 並透過管理介面設定該 Bot 的 Discord token。再以 `POST /v1/mcp-connections` 建立 `{ "id": "discord-example-bot", "serviceId": "discord-mcp", "botId": "example-bot" }`；由 DCenter 以這個 Bot 的 token 啟動獨立 MCP 程序。以 `GET /v1/mcp-connections/discord-example-bot/tools` 查看實際列出的工具，最後以 `PUT /v1/bots/example-bot/mcp-grants/discord-example-bot` 提交 `{ "toolNames": ["guild_get"] }`。服務註冊及連線資料均不填 token 原值；管理 API 操作須使用 DCenter 的管理認證。
+### 2. 註冊可信本機服務
 
-DCenter 目前只接受授權 `guild_get`、`guild_list_channels`、`channel_get`，由底座控制 Bot AI 可見與可呼叫的範圍；本 MCP 仍向其他標準 MCP 客戶端提供全部既有工具。每個 Bot 建立自己的連線，不能共用另一個 Bot 的 Discord 身分。正式 Bot 經 DCenter 呼叫 Discord 的煙霧測試仍待驗收。
+管理員先核對程式與依賴，再以建置後的入口檔 SHA-256 註冊。`credentialSlot` 表示 DCenter 將憑證放入哪個環境變數；此處不填 token 原值。
+
+```powershell
+$service = @{
+  id = 'discord-mcp'
+  name = 'Discord MCP'
+  version = '0.1.0'
+  transport = 'stdio'
+  command = (Get-Command node -CommandType Application).Source
+  args = @($mcpEntry)
+  cwd = $mcpRoot
+  credentialSlot = 'DISCORD_BOT_TOKEN'
+  artifact = @{ path = $mcpEntry; sha256 = (Get-FileHash -LiteralPath $mcpEntry -Algorithm SHA256).Hash.ToLowerInvariant() }
+} | ConvertTo-Json -Depth 4
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-services" -Headers $headers -ContentType 'application/json' -Body $service
+```
+
+### 3. 建立 Bot 專屬身分與連線
+
+`kind = 'bot-discord-token'` 以 `ownerBotId` 參照底座已保存的 Bot 身分，不傳 `secret`。連線透過 `installationId` 選擇身分，不能直接以連線上的 `botId` 取代外部安裝。
+
+```powershell
+$installation = @{ id = 'example-discord-identity'; serviceId = 'discord-mcp'; kind = 'bot-discord-token'; ownerBotId = $botId } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-installations" -Headers $headers -ContentType 'application/json' -Body $installation
+$connection = @{ id = 'discord-example-bot'; serviceId = 'discord-mcp'; installationId = 'example-discord-identity' } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-connections" -Headers $headers -ContentType 'application/json' -Body $connection
+Invoke-RestMethod -Uri "$base/v1/mcp-connections/discord-example-bot/tools" -Headers $headers
+```
+
+DCenter 按需啟動 stdio 程序並注入該 Bot 的 token；Bot 不自行啟動 MCP。服務程式可共用，但每個 Bot 的 Discord 身分安裝與連線分開建立，只有擁有該身分的 Bot 可取得授權。
+
+### 4. 審核工具，再授權 Bot
+
+先確認實際清單有 `guild_get`，核對程式、身分範圍、描述及參數後才記錄唯讀審核。`readOnlyHint` 等 annotation 只是提示，不代替管理員審核，也不證明工具真正唯讀。
+
+```powershell
+Invoke-RestMethod -Uri "$base/v1/mcp-connections/discord-example-bot/reviews" -Headers $headers
+$review = @{ decision = 'read-only' } | ConvertTo-Json
+Invoke-RestMethod -Method Put -Uri "$base/v1/mcp-connections/discord-example-bot/reviews/guild_get" -Headers $headers -ContentType 'application/json' -Body $review
+$grant = @{ toolNames = @('guild_get') } | ConvertTo-Json
+Invoke-RestMethod -Method Put -Uri "$base/v1/bots/$botId/mcp-grants/discord-example-bot" -Headers $headers -ContentType 'application/json' -Body $grant
+```
+
+底座目前依連線實際發現且審核有效的工具授權，已無固定三個工具名稱的白名單；現行審核決策只有 `read-only`。發送、修改、刪除與讀本機檔案的工具不可為了通過授權而標成唯讀，須另行完成底座的相應能力與驗收。本 MCP 仍向其他標準 MCP 客戶端提供全部既有工具。
+
+### 5. 呼叫、撤權與更新後驗收
+
+Bot 從公開 runtime 的 `tools.list()` 取得當前已授權工具，再以回傳的不透明名稱呼叫 `tools.call(name, args)`，不要自行拼接跨連線工具名稱。新增授權在下一個 AI 回合可見；底座每次呼叫仍重驗權限。
+
+使用 Starter 時，在已設定的受控伺服器以操作者執行 `/mcp-check`，應得到 `guild_get OK`；AI 已啟用且 Codex 可用時，再以 `/ask` 查詢同一伺服器資料。撤權範例：
+
+```powershell
+Invoke-RestMethod -Method Delete -Uri "$base/v1/bots/$botId/mcp-grants/discord-example-bot" -Headers $headers
+```
+
+撤權後新呼叫應被拒絕，Starter `/mcp-check` 應顯示工具不可用，新一回合 `/ask` 不應再取得該工具，而 `/ping` 仍可用。`tools/list` 成功不代表真實 Discord 呼叫、Bot 授權或 AI 已完成驗收。
+
+產物內容變更會觸發 `MCP_ARTIFACT_CHANGED`；工具描述／參數或安裝範圍變更會使既有審核失效。現行服務定義沒有更新端點；升級程式時建立新的服務 ID、身分安裝與連線，重新發現、審核與授權，並撤銷舊連線授權。入口檔雜湊只核對指定檔案，不涵蓋全部匯入模組及依賴，不能當成整個套件的完整性證明。
+
+本機相容性與真實 Discord 驗收分開記錄，見[驗證紀錄](docs/live-verification.md)。新版 DCenter 的完整真實 Bot／AI／Discord 接入仍待驗收。
 
 ## 已提供的工具
 

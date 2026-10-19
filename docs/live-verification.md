@@ -1,5 +1,34 @@
 # Discord 實機驗收紀錄
 
+## 2026-10-19：DCenter 0.2.0 本機相容性檢查
+
+對象為 Discord_MCP `025ef98`、DCenter `36ef4dc`，使用 Windows／Node.js `24.14.0`。本節記錄本機自動化與模擬 API 結果，沒有使用正式 Discord 憑證，不能視為新版實機驗收。
+
+| 檢查 | 結果與邊界 |
+| --- | --- |
+| `npm.cmd test` | TypeScript 建置及 77 項測試通過，0 失敗、0 跳過；以標準 MCP 客戶端與受控 HTTP 回應驗證 |
+| DCenter `McpConnections` → 本專案 stdio | 以底座實際連線元件完成工具發現，列出 201 個工具；`guild_get` 透過本機模擬 Discord HTTP API 回傳 200，路徑與 Bot 身分標頭符合預期，結束後關閉連線 |
+| 完整新版接入 | 真實管理 API 註冊、身分安裝、工具審核／授權、正式 Bot／AI → Discord、撤權與重啟尚未完成實機驗收；上述連線元件檢查不涵蓋這些步驟 |
+
+此處的工具數量屬於該提交的觀測結果，不是固定契約。現行註冊與驗收操作見 [README](../README.md#接入-dcenter-本機-mcp)。
+
+## 2026-10-19：DCenter 0.2.0 文件主張對照
+
+本次核對 Discord_MCP `025ef98` 加工作目錄文件修改，以及本機 DCenter `2122877`。兩個工作目錄均有未提交修改；下列底座來源的 MCP 區段與 `2122877` 無差異（`src/openapi.ts` 的維修端點摘要另有修改），管理 API 與 MCP 指南也與先前引用的 `36ef4dc` 無差異。這是文件與契約的靜態核對，沒有對執行中的管理 API 發送註冊或授權請求。
+
+底座來源固定於 [DCenter `2122877`](https://github.com/Donald30498/DCenter/tree/2122877)。表中的來源檔案均相對於該提交。
+
+| 文件位置／主張 | 事實來源 | 結果 | 未驗證範圍 |
+| --- | --- | --- | --- |
+| [README 接入流程](../README.md#接入-dcenter-本機-mcp)：服務 → 安裝 → 連線 → 審核 → grant，包含 `artifact`、`credentialSlot`、`installationId`、`decision`、`toolNames` | [`src/openapi.ts`](https://github.com/Donald30498/DCenter/blob/2122877/src/openapi.ts) 的 MCP schemas 及 `/v1/mcp-*`、`mcp-grants` 端點 | 已核對，範例方法、路徑與必要欄位一致 | 尚未以真實管理 API 執行整組範例 |
+| README 身分隔離與唯讀審核：Bot 身分只供擁有者，annotation 不是審核 | [`docs/management-api.md`](https://github.com/Donald30498/DCenter/blob/2122877/docs/management-api.md)「本機 MCP 服務定義」「Bot MCP 工具授權」；`src/openapi.ts` 的 grant 403 與 `read-only` 決策 | 已核對契約；[本專案測試](../test/dcenter-integration.test.mjs)另驗證兩個 stdio 客戶端使用不同 Bot token | 該測試未覆蓋底座跨 Bot 授權拒絕 |
+| README 更新與撤權：入口檔雜湊變更拒絕呼叫、工具或安裝資料變更使審核失效、新呼叫重驗授權 | [`src/mcp-connections.ts`](https://github.com/Donald30498/DCenter/blob/2122877/src/mcp-connections.ts) 的 `verifyArtifact`、[`src/mcp-review-policy.ts`](https://github.com/Donald30498/DCenter/blob/2122877/src/mcp-review-policy.ts) 的 `fingerprintMcpReview`、[`src/mcp-broker.ts`](https://github.com/Donald30498/DCenter/blob/2122877/src/mcp-broker.ts) 的 `call` | 已核對原始碼 | 尚未在真實 Bot／AI 回合執行撤權與重啟驗收 |
+| README stdio 版本矩陣、stdout／stderr 約定與協商錯誤碼 | [`docs/mcp-development.md`](https://github.com/Donald30498/DCenter/blob/2122877/docs/mcp-development.md)「MCP 開發契約」；`src/mcp-connections.ts` 的 `supportedVersions` 與錯誤對應 | 已核對底座契約，已補入 README | 本 MCP 的實際協商版本及逐版相容性仍待記錄，不能將底座矩陣當成本 MCP 的逐版驗收結果 |
+| 本頁自動化紀錄：建置與 77 項測試通過 | 本次工作階段執行 `npm.cmd test`：77 pass、0 fail、0 skipped；測試碼位於 `test/` | 已核對本機受控情境 | 沒有正式 Discord 憑證、Bot／AI 或完整管理流程的實機結果 |
+| 本頁先前 `McpConnections` 列出 201 個工具並呼叫成功的紀錄 | 本頁前一節記錄 Discord_MCP `025ef98`／DCenter `36ef4dc` 的連線元件檢查 | 歷史紀錄，本次未重跑該探測 | 原探測未記錄協商版本，也不涵蓋管理 API 註冊與工具授權 |
+
+## 2026-10-14：Discord 實機歷史紀錄
+
 2026-10-14 使用測試 Bot 與測試伺服器 `1559785203763912844` 驗證 T11–T25。憑證只從本機且被 Git 忽略的 `docs/token.txt` 讀取，沒有寫入提交或測試輸出。這是當時的驗收紀錄；[合併前的逐票紀錄](https://github.com/Donald30498/Discord_MCP/tree/818e6e9/docs)仍保留在 Git 歷史。現行行為以程式、測試及 Discord 實際回應為準；[API 覆蓋清單](discord-api-coverage.md)記錄操作的盤點狀態。
 
 T12–T19 的原紀錄載明使用 MCP stdio 客戶端進行實機驗證。T11 與 T20–T25 的原紀錄只載明測試 Bot 的 Discord 實機回應，未記載完整呼叫路徑；對應工具另有 MCP 客戶端至受控 HTTP 回應的自動測試。下表的「未實機驗證」不代表工具沒有實作。
