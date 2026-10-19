@@ -1,6 +1,6 @@
 # Discord MCP
 
-本機 stdio MCP 伺服器，將 Discord Bot 可用的 HTTP 操作提供為具名工具。現有工具及待完成範圍見[覆蓋清單](docs/discord-api-coverage.md)。
+本機 stdio MCP 伺服器，將 Discord Bot 可用的 HTTP 操作及互動回覆的 token 專用操作提供為具名工具。現有工具及待完成範圍見[覆蓋清單](docs/discord-api-coverage.md)。
 
 文件導覽：[設計決定](docs/discord-mcp-design.md) · [實機驗收與未驗證項目](docs/live-verification.md) · [核心邊界 ADR](docs/adr/0001-discord-mcp-is-an-operation-toolset.md)。
 
@@ -13,6 +13,98 @@
 - 環境變數：`DISCORD_BOT_TOKEN`，值為自行建立的 Discord Bot token
 
 每個客戶端可各自啟動程序。token 由啟動環境提供，不放在工具參數中。
+
+## 接入 DCenter 本機 MCP
+
+本節對應 DCenter **0.2.0** 的整個 MCP 接入與目錄 v1 契約；來源為底座提供的 `docs/discord-mcp-directory-upgrade.md`、`docs/contracts/mcp-directory-v1.md` 及執行中的管理 API。Discord MCP 自身版本為 `1.0.0`。實際端點結構以執行中且已認證的 `GET /v1/openapi.json` 為準；先前逐工具審核流程已移除。
+
+底座的 stdio 協定矩陣為 `2025-11-25` 與 `2026-07-28`，以版本協商選擇；這不代表本 MCP 已逐版驗證，實際協商版本仍須記錄。發現失敗時，`MCP_PROTOCOL_UNSUPPORTED` 表示版本不支援、`MCP_NEGOTIATION_FAILED` 表示協商失敗、`MCP_TOOLS_UNAVAILABLE` 表示服務未提供 tools 能力。stdio 的 stdout 僅供協定訊息，診斷輸出使用 stderr；[證據與待驗證範圍](docs/live-verification.md)分開記錄文件核對及執行結果。
+
+0.2.0 不自動遷移舊 MCP 註冊資料；升級前備份私有設定，依底座指南重新設定與註冊。先完成 Bot 註冊並在 DCenter 管理頁設定該 Bot 的 Discord token，再依序建立「服務 → 外部安裝／身分 → 連線 → Bot 接入」。Bot 使用 IPC v3；本 MCP 本身使用標準 stdio，不實作 Bot IPC。
+
+### 工具目錄 v1
+
+標準 `resources/list` 列出固定 URI `dcenter://mcp/directory/v1`，`resources/read` 回傳一項 `application/json` 文字，含 `schemaVersion: 1`、`revision`、`folders`、`tools`。目錄是導航資料，不是權限表；標準 `tools/list` 及 `tools/call` 維持原樣，所有操作工具仍可呼叫。
+
+分類由實際工具註冊的名稱套用用途規則產生，每個現有工具只歸屬一個資料夾。例如 `guild_message_search` 放在「訊息／查詢與搜尋」，`guild_member_role_add` 放在「成員與身分組／身分組」。第一層另有伺服器、頻道、討論串、互動回覆、應用程式、媒體、語音、活動、邀請、Webhook、使用者、Lobby、商品權益及自動審查；完整名稱與摘要以 resource 為準。[目錄測試](test/tool-directory.test.mjs)確認所有實際工具都有唯一歸屬、父子關係有效及重要跨領域工具分類正確。
+
+目錄在程序啟動時建立，目前不提供熱更新或 resource 訂閱。`revision` 為資料夾資料與工具歸屬 JSON 的 SHA-256；名稱、摘要、父關係或歸屬改變，重啟後 revision 自動改變。工具描述／schema 變更由底座另外辨識；只移動資料夾不改變工具呼叫。新工具若沒有分類規則，仍正常註冊，由底座放入「未分類」，完整歸屬測試會失敗提醒補分類。
+
+DCenter 負責逐層瀏覽、搜尋、按需載入與執行；Bot 的 `tools.list()` 初始取得 `dcenter_mcp_browse`、`dcenter_mcp_search`、`dcenter_mcp_load`、`dcenter_mcp_invoke` 四個探索入口。一般 MCP 客戶端不會自動理解這份目錄的語意。
+
+### 1. 建置與管理員工作階段
+
+在 Discord_MCP 專案執行 `npm.cmd ci`、`npm.cmd run build`。以下範例在**管理員 PowerShell** 執行，請替換實際路徑、Bot ID 與管理埠；若使用自訂 `DCENTER_CONFIG`，也須調整私有設定檔路徑。設定檔只在管理員工作階段讀取，不複製到 MCP 或 Bot 專案。
+
+```powershell
+$dcenterRoot = 'C:\Users\USER\Desktop\DCenter'
+$mcpRoot = 'C:\Users\USER\Desktop\Discord_MCP'
+$botId = 'example-bot'
+$base = 'http://127.0.0.1:4317'
+$secret = (Get-Content -LiteralPath (Join-Path $dcenterRoot '.dcenter\config.json') -Raw -Encoding UTF8 | ConvertFrom-Json).managementSecret
+$headers = @{ Authorization = "Bearer $secret" }
+$mcpEntry = (Resolve-Path -LiteralPath (Join-Path $mcpRoot 'dist\main.js')).Path
+```
+
+### 2. 註冊可信本機服務
+
+管理員先核對程式與依賴，再以建置後的入口檔 SHA-256 註冊。`credentialSlot` 表示 DCenter 將憑證放入哪個環境變數；此處不填 token 原值。
+
+```powershell
+$service = @{
+  id = 'discord-mcp'
+  name = 'Discord MCP'
+  version = '1.0.0'
+  transport = 'stdio'
+  command = (Get-Command node -CommandType Application).Source
+  args = @($mcpEntry)
+  cwd = $mcpRoot
+  credentialSlot = 'DISCORD_BOT_TOKEN'
+  artifact = @{ path = $mcpEntry; sha256 = (Get-FileHash -LiteralPath $mcpEntry -Algorithm SHA256).Hash.ToLowerInvariant() }
+} | ConvertTo-Json -Depth 4
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-services" -Headers $headers -ContentType 'application/json' -Body $service
+```
+
+### 3. 建立 Bot 專屬身分與連線
+
+`kind = 'bot-discord-token'` 以 `ownerBotId` 參照底座已保存的 Bot 身分，不傳 `secret`。連線透過 `installationId` 選擇身分，不能直接以連線上的 `botId` 取代外部安裝。
+
+```powershell
+$installation = @{ id = 'example-discord-identity'; serviceId = 'discord-mcp'; kind = 'bot-discord-token'; ownerBotId = $botId } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-installations" -Headers $headers -ContentType 'application/json' -Body $installation
+$connection = @{ id = 'discord-example-bot'; serviceId = 'discord-mcp'; installationId = 'example-discord-identity' } | ConvertTo-Json
+Invoke-RestMethod -Method Post -Uri "$base/v1/mcp-connections" -Headers $headers -ContentType 'application/json' -Body $connection
+Invoke-RestMethod -Uri "$base/v1/mcp-connections/discord-example-bot/tools" -Headers $headers
+```
+
+DCenter 按需啟動 stdio 程序並注入該 Bot 的 token；Bot 不自行啟動 MCP。服務程式可共用，但每個 Bot 的 Discord 身分安裝與連線分開建立，只有擁有該身分的 Bot 可取得授權。
+
+### 4. 將整個 MCP 接給 Bot
+
+接上後，Bot 可透過目錄探索並呼叫該連線全部工具，包含寫入、刪除及後續新增工具。DCenter 不審核或限制個別操作；Discord 原生權限決定操作是否成功，Bot 自行處理功能與操作者規則。
+
+```powershell
+$grant = @{ enabled = $true } | ConvertTo-Json
+Invoke-RestMethod -Method Put -Uri "$base/v1/bots/$botId/mcp-grants/discord-example-bot" -Headers $headers -ContentType 'application/json' -Body $grant
+```
+
+可在管理台的「MCP 能力」接上或解除。身分隔離仍以該連線的外部安裝為準；不接受其他 Bot 使用這個 Bot 的 Discord 身分。
+
+### 5. 呼叫、解除與更新後驗收
+
+Bot 從公開 runtime 的 `tools.list()` 取得四個探索入口，再由 browse／search 找到工具、load 取得 schema 與 handle、invoke 執行。使用底座回傳的 `connectionId`、`toolId` 與 handle，不自行拼接名稱。底座載入及執行前更新 discovery，並重查當前身分與 MCP 接入狀態。
+
+驗收時，先在管理台逐層展開目錄、搜尋並開啟單一工具，再由已啟用 AI 的 Bot 查詢受控伺服器資料，確認實際經 browse／load／invoke 呼叫成功。舊版 `/mcp-check` 若直接尋找平面工具，需先依新版 runtime 調整，不能作為目錄接入成功的判準。解除範例：
+
+```powershell
+Invoke-RestMethod -Method Delete -Uri "$base/v1/bots/$botId/mcp-grants/discord-example-bot" -Headers $headers
+```
+
+解除後，即使已持有 handle，新呼叫仍應被拒絕；新回合探索結果不應出現該來源。`tools/list` 或目錄驗證成功不代表真實 Discord 呼叫、Bot AI 或前端已完成驗收。
+
+產物內容變更會觸發 `MCP_ARTIFACT_CHANGED`。現行服務定義沒有更新端點；升級程式時建立新的服務 ID、身分安裝與連線，確認目錄後重新接給原 Bot，並解除舊連線。入口檔雜湊只核對指定檔案，不涵蓋全部匯入模組及依賴，不能當成整個套件的完整性證明。目錄 revision 由底座處理瀏覽快取；工具定義變更後的舊 handle 回 `MCP_TOOL_CHANGED`，須重新載入，與工具審核無關。
+
+本機相容性與真實 Discord 驗收分開記錄，見[驗證紀錄](docs/live-verification.md)。新版 DCenter 的完整真實 Bot／AI／Discord 接入仍待驗收。
 
 ## 已提供的工具
 
@@ -124,6 +216,98 @@
 - `poll_end`：`channel_id`、`message_id`；結束 Bot 自己建立的投票。使用 `message_create` 的 `poll` 欄位建立投票；Discord 不允許 Bot 投票。
 
 `message_create` 與 `message_edit` 可選填 `files: [{ "path": "本機檔案路徑", "filename": "可選的上傳檔名" }]`。有檔案時，工具以 `multipart/form-data` 傳送 `files[0]` 等檔案欄位，其他訊息欄位放入 `payload_json`；沒有檔案時仍使用 JSON。`attachments` 沿用 Discord 官方欄位：新檔案的 `id` 對應 `files[n]` 的索引；編輯時若指定 `attachments`，必須列出所有要保留的舊附件與新附件。工具不限制檔案路徑。大量刪除的 2–100 筆、14 天限制以及轉送所需頻道與權限由 Discord 判定，工具不做額外預檢。[Discord Message API](https://docs.discord.com/developers/resources/message)、[官方上傳說明](https://docs.discord.com/developers/reference#uploading-files)
+
+## 互動元件與回覆
+
+**送出元件。** `message_create` 與 `message_edit` 沿用通用的 `components` 欄位。下列是傳統訊息元件的三個按鈕；`allowed_mentions` 避免範例文字觸發提及：
+
+```json
+{
+  "channel_id": "CHANNEL_ID",
+  "content": "請選擇一項",
+  "allowed_mentions": { "parse": [] },
+  "components": [{ "type": 1, "components": [
+    { "type": 2, "style": 1, "label": "選項 A", "custom_id": "choose:a" },
+    { "type": 2, "style": 2, "label": "選項 B", "custom_id": "choose:b" },
+    { "type": 2, "style": 2, "label": "選項 C", "custom_id": "choose:c" }
+  ] }]
+}
+```
+
+改用訊息元件 **String Select** 單選時，可把上述 `components` 換成：
+
+```json
+[{ "type": 1, "components": [{
+  "type": 3, "custom_id": "choose:menu", "min_values": 1, "max_values": 1,
+  "options": [
+    { "label": "選項 A", "value": "a" },
+    { "label": "選項 B", "value": "b" },
+    { "label": "選項 C", "value": "c" }
+  ]
+}] }]
+```
+
+處理完成後可呼叫 `message_edit`，帶入原本的 `channel_id`、`message_id` 及元件，並對要停用的按鈕或選單設定 `"disabled": true`。例如將選單停用：
+
+```json
+{
+  "channel_id": "CHANNEL_ID", "message_id": "MESSAGE_ID",
+  "content": "已完成選擇", "allowed_mentions": { "parse": [] },
+  "components": [{ "type": 1, "components": [{
+    "type": 3, "custom_id": "choose:menu", "min_values": 1, "max_values": 1,
+    "disabled": true,
+    "options": [
+      { "label": "選項 A", "value": "a" },
+      { "label": "選項 B", "value": "b" },
+      { "label": "選項 C", "value": "c" }
+    ]
+  }] }]
+}
+```
+
+Components V2 訊息需設定 `flags: 32768`，文字改放在 Text Display 元件中；建立時不可同時提供傳統 `content`、`embeds`、`sticker_ids` 或 `poll`。編輯既有訊息並加上此 flag 時，也須依 Discord 規則清空原本的傳統內容。此 flag 設定後不能移除。可直接用於 `message_create`：
+
+```json
+{
+  "channel_id": "CHANNEL_ID",
+  "flags": 32768,
+  "allowed_mentions": { "parse": [] },
+  "components": [
+    { "type": 10, "content": "請選擇一項" },
+    { "type": 1, "components": [
+      { "type": 2, "style": 1, "label": "選項 A", "custom_id": "choose:a" },
+      { "type": 2, "style": 2, "label": "選項 B", "custom_id": "choose:b" },
+      { "type": 2, "style": 2, "label": "選項 C", "custom_id": "choose:c" }
+    ] }
+  ]
+}
+```
+
+**接收點擊事件。** 呼叫模組自行透過 Gateway 或 outgoing webhook 接收互動；兩者對同一 Discord 應用程式互斥。模組從事件取得 `id`、`token`、`application_id`、使用者，以及 `data.custom_id`；String Select 的選值在 `data.values`。模組自行驗證操作者、來源及操作狀態。MCP 不接收事件。
+
+**回覆互動。** 模組應在事件送達後 3 秒內呼叫 `interaction_response_create`。以下使用 callback `type: 7` 更新被點擊的元件訊息；若只回覆點擊者，可改用 `type: 4`，並在 `data` 設定 `flags: 64`（`EPHEMERAL`）：
+
+```json
+{
+  "interaction_id": "INTERACTION_ID",
+  "interaction_token": "INTERACTION_TOKEN",
+  "type": 7,
+  "data": { "content": "已處理", "components": [], "allowed_mentions": { "parse": [] } }
+}
+```
+
+耗時工作先以 `type: 5` defer，例如 `data: { "flags": 64 }`，再呼叫 `interaction_original_response_edit`：
+
+```json
+{
+  "application_id": "APPLICATION_ID",
+  "interaction_token": "INTERACTION_TOKEN",
+  "content": "已完成",
+  "allowed_mentions": { "parse": [] }
+}
+```
+
+`type: 5` 的初次 callback 若帶 `flags`，只可使用 `EPHEMERAL`；原始回覆的公開狀態之後不能更改。`type: 6` 是延後更新原元件訊息，`type: 6`／`7` 僅適用元件互動及符合 Discord 規則的 Modal Submit。互動 token 約 15 分鐘有效。兩個回覆工具從參數取得 token，HTTP 請求不帶 Bot Authorization；結果保留 HTTP 狀態、本文及相關標頭，不自動重試。呼叫模組與 MCP 客戶端應避免記錄 token。[Discord 互動回覆文件](https://docs.discord.com/developers/interactions/receiving-and-responding)、[元件參考](https://docs.discord.com/developers/components/reference)
 
 討論串工具依資源命名：
 

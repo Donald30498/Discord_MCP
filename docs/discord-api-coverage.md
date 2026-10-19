@@ -212,7 +212,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 
 | 方法 | 路徑 | 官方 operationId | Bot 適用性 | 工具／備註 |
 | --- | --- | --- | --- | --- |
-| POST | /interactions/{interaction_id}/{interaction_token}/callback | create_interaction_response | 不適用 | 使用 interaction token，非程序 Bot token |
+| POST | /interactions/{interaction_id}/{interaction_token}/callback | create_interaction_response | Bot 不適用；互動 token 例外 | 已實作：`interaction_response_create`；不帶 Bot Authorization |
 
 ## invites（9）
 
@@ -339,7 +339,7 @@ Bot 適用性：待核對、可用、不適用。工具／備註欄在實作後�
 | POST | /webhooks/{webhook_id}/{webhook_token}/github | execute_github_compatible_webhook | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
 | DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/@original | delete_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
 | GET | /webhooks/{webhook_id}/{webhook_token}/messages/@original | get_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
-| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/@original | update_original_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
+| PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/@original | update_original_webhook_message | Bot 不適用；互動 token 例外 | 已實作：`interaction_original_response_edit`，僅以 application_id 與 interaction token 編輯原始互動回覆；一般 webhook token 操作不在範圍 |
 | DELETE | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | delete_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
 | GET | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | get_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |
 | PATCH | /webhooks/{webhook_id}/{webhook_token}/messages/{message_id} | update_webhook_message | 不適用 | 需要 webhook token；本階段 Bot token 不涵蓋 |

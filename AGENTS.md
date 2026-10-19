@@ -11,3 +11,7 @@ Use the five default triage labels. See `docs/agents/triage-labels.md`.
 ### Domain docs
 
 Use a single-context glossary and ADR layout. See `docs/agents/domain.md`.
+
+### Documentation checks
+
+When checking documentation against implementation or an external contract, follow `docs/agents/documentation.md`.

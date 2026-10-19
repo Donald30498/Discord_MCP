@@ -1,12 +1,13 @@
 {
   "name": "discord-mcp",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
+    "check:docs": "node scripts/check-doc-links.mjs",
     "build": "tsc",
     "test": "npm run build && node --test test/*.test.mjs",
     "start": "node dist/main.js"
