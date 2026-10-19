@@ -28,9 +28,11 @@ import { registerLobbyGateway } from './register-lobby-gateway.js';
 import { registerChannelMisc } from './register-channel-misc.js';
 import { registerApplicationExtra } from './register-application-extra.js';
 import { registerInteractionResponse } from './register-interaction-response.js';
+import { registerDirectory } from './tool-directory.js';
 
 function createServer(): McpServer {
-  const server = new McpServer({ name: 'discord-mcp', version: '0.1.0' });
+  const server = new McpServer({ name: 'discord-mcp', version: '1.0.0' });
+  registerDirectory(server);
   server.registerTool(
     'user_get_current',
     {
